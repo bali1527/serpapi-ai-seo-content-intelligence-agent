@@ -1,0 +1,2634 @@
+{
+  "name": "Hackathon copy",
+  "nodes": [
+    {
+      "parameters": {
+        "extractionValues": {
+          "values": [
+            {
+              "key": "title",
+              "cssSelector": "title",
+              "returnArray": true
+            },
+            {
+              "key": "headings",
+              "cssSelector": "h2, h3",
+              "returnArray": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "34f6f3a2-dcdd-47a0-b53f-db082f90b980",
+      "name": "Extract HTML",
+      "type": "n8n-nodes-base.htmlExtract",
+      "position": [
+        -1536,
+        1200
+      ],
+      "typeVersion": 1,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "documentId": {
+          "__rl": true,
+          "value": "1hRJ5G5B9geJZN11LNmcn-n4gdNxtfH_H_9ghGub4vwQ",
+          "mode": "list",
+          "cachedResultName": "SEO_Keyword_Agent",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1hRJ5G5B9geJZN11LNmcn-n4gdNxtfH_H_9ghGub4vwQ/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 950064160,
+          "mode": "list",
+          "cachedResultName": "seed keyword",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1hRJ5G5B9geJZN11LNmcn-n4gdNxtfH_H_9ghGub4vwQ/edit#gid=950064160"
+        },
+        "event": "rowAdded",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTrigger",
+      "typeVersion": 1,
+      "position": [
+        -3936,
+        1488
+      ],
+      "id": "286dc881-9877-468f-9fcb-93687dc66d20",
+      "name": "Google Sheets Trigger"
+    },
+    {
+      "parameters": {
+        "url": "=https://serpapi.com/search.json\n",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "q",
+              "value": "={{ $json[\"primary keyword\"] }}"
+            },
+            {
+              "name": "api_key"
+            },
+            {
+              "name": "engine",
+              "value": "google"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        -3584,
+        1184
+      ],
+      "id": "a2bf003c-140a-43ee-a230-638d08f9d6d8",
+      "name": "HTTP Request",
+      "retryOnFail": true
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "1ff85e7a-9a0a-4142-a4ff-f7360bfc14f8",
+              "name": "urls",
+              "value": "={{$json[\"organic_results\"]}}",
+              "type": "array"
+            },
+            {
+              "id": "a5bea860-1bb4-49d0-989d-529c06873888",
+              "name": "",
+              "value": "",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -3104,
+        1184
+      ],
+      "id": "9067db06-c1d8-47be-8421-13e74ddf1331",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.link }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "User-Agent",
+              "value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 60000
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        -1872,
+        1200
+      ],
+      "id": "9518467a-f37f-4637-a1f1-1af16bd56082",
+      "name": "competitor website",
+      "alwaysOutputData": false,
+      "retryOnFail": false,
+      "waitBetweenTries": 3000,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.apify.com/v2/acts/burbn~semrush-ke0yword-magic-tool/runs?token=APIFY_API_KEY",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"keyword\": \"{{ $json.keyword.trim() }}\",\n  \"country\": \"{{ $json.country }}\",\n  \"language\": \"{{ $json.language }}\",\n  \"maxResults\": {{ $json.maxResults }}\n}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        -3104,
+        1840
+      ],
+      "id": "8714e971-2440-4572-99d8-3de564705763",
+      "name": "HTTP Request1"
+    },
+    {
+      "parameters": {
+        "url": "https://api.apify.com/v2/acts/burbn~semrush-keyword-magic-tool/runs/last/dataset/items?token=apify_api_key",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        -2192,
+        1840
+      ],
+      "id": "4170155f-76d8-4558-b79f-841d18c33871",
+      "name": "HTTP Request2",
+      "alwaysOutputData": true,
+      "retryOnFail": true
+    },
+    {
+      "parameters": {
+        "amount": 30
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        -2640,
+        1840
+      ],
+      "id": "249c810c-3f9d-4fce-8750-83a7a0a6d3db",
+      "name": "Wait",
+      "webhookId": "ac9589bf-0a31-426f-9e83-44d70ba53d59"
+    },
+    {
+      "parameters": {
+        "jsCode": "// ===== CONFIG =====\nconst PRIMARY_KEYWORD =\n  items[0].json.primary_keyword || items[0].json.keyword || \"\";\n\nconst MIN_VOLUME = 20;\nconst MAX_PER_GROUP = 5;\n\n// Normalize\nconst normalize = str =>\n  (str || \"\")\n    .toLowerCase()\n    .replace(/[^a-z0-9\\s]/g, \"\")\n    .trim();\n\nconst tokenize = str =>\n  normalize(str).split(\" \").filter(w => w.length > 2);\n\n// Semantic relevance (soft)\nconst isSemanticallyRelated = (kw, primary) => {\n  const p = tokenize(primary);\n  const k = tokenize(kw);\n  if (!p.length) return true;\n  return p.some(t => k.includes(t));\n};\n\n// Intent compatibility\nconst isIntentCompatible = (intent = \"\") =>\n  intent.includes(\"informational\") || intent.includes(\"commercial\");\n\n// Buckets\nlet secondary = [];\nlet supporting = [];\n\n// Collect candidates\nfor (const item of items) {\n  const {\n    keyword,\n    avgMonthlySearches = 0,\n    intent = \"\"\n  } = item.json;\n\n  if (!keyword) continue;\n  if (normalize(keyword) === normalize(PRIMARY_KEYWORD)) continue;\n  if (!isSemanticallyRelated(keyword, PRIMARY_KEYWORD)) continue;\n  if (!isIntentCompatible(intent)) continue;\n  if (avgMonthlySearches < MIN_VOLUME) continue;\n\n  const entry = { keyword, volume: avgMonthlySearches };\n\n  if (avgMonthlySearches >= 100) {\n    secondary.push(entry);\n  } else {\n    supporting.push(entry);\n  }\n}\n\n// Sort by volume\nsecondary.sort((a, b) => b.volume - a.volume);\nsupporting.sort((a, b) => b.volume - a.volume);\n\n// 🔁 FILL-UP secondary if less than 5\nif (secondary.length < MAX_PER_GROUP) {\n  const needed = MAX_PER_GROUP - secondary.length;\n  secondary = secondary.concat(supporting.slice(0, needed));\n  supporting = supporting.slice(needed);\n}\n\n// 🔁 FILL-UP supporting if less than 5\nif (supporting.length < MAX_PER_GROUP) {\n  const usedKeywords = new Set(\n    secondary.map(k => k.keyword).concat(supporting.map(k => k.keyword))\n  );\n\n  const extras = items\n    .map(i => i.json)\n    .filter(\n      k =>\n        k.keyword &&\n        !usedKeywords.has(k.keyword) &&\n        normalize(k.keyword) !== normalize(PRIMARY_KEYWORD)\n    )\n    .map(k => ({ keyword: k.keyword, volume: k.avgMonthlySearches || 0 }))\n    .sort((a, b) => b.volume - a.volume);\n\n  supporting = supporting.concat(\n    extras.slice(0, MAX_PER_GROUP - supporting.length)\n  );\n}\n\n// Final clean output\nreturn [\n  {\n    json: {\n      primary_keyword: PRIMARY_KEYWORD,\n      secondary_keywords: secondary\n        .slice(0, MAX_PER_GROUP)\n        .map(k => k.keyword),\n      other_relevant_keywords: supporting\n        .slice(0, MAX_PER_GROUP)\n        .map(k => k.keyword)\n    }\n  }\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1824,
+        1840
+      ],
+      "id": "76bb7d1c-4866-4b2a-a2d9-b9d66b2402cc",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "34273f46-7eff-45c6-9bb2-30b9df90d5bd",
+              "name": "keyword",
+              "value": "=={{ $json[\"primary keyword\"] }}",
+              "type": "string"
+            },
+            {
+              "id": "e9356fb1-7112-4270-8c87-a008c39a9129",
+              "name": "country",
+              "value": "us",
+              "type": "string"
+            },
+            {
+              "id": "32695024-c4fa-4532-b3e5-075f6e2630e3",
+              "name": "language",
+              "value": "en",
+              "type": "string"
+            },
+            {
+              "id": "9569ed65-39c1-405f-b2fa-ac9603bacf25",
+              "name": "maxResults",
+              "value": "25",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -3616,
+        1840
+      ],
+      "id": "4dddba0b-7fbb-45f2-998f-2294c9a60832",
+      "name": "Edit Fields3"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        -560,
+        1520
+      ],
+      "id": "2eb2a9cd-380a-4da6-aa0f-71dcb8db0b2a",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1hRJ5G5B9geJZN11LNmcn-n4gdNxtfH_H_9ghGub4vwQ",
+          "mode": "list",
+          "cachedResultName": "SEO_Keyword_Agent",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1hRJ5G5B9geJZN11LNmcn-n4gdNxtfH_H_9ghGub4vwQ/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "source code",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1hRJ5G5B9geJZN11LNmcn-n4gdNxtfH_H_9ghGub4vwQ/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "title": "={{ $json.title }}",
+            "h2": "={{ $json.h2 }}",
+            "h3": "={{ $json.h3 }}"
+          },
+          "matchingColumns": [
+            "source code"
+          ],
+          "schema": [
+            {
+              "id": "title",
+              "displayName": "title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "h2",
+              "displayName": "h2",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "h3",
+              "displayName": "h3",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -960,
+        1200
+      ],
+      "id": "e01a2ed4-1cb1-441c-8cd2-5e144578ca9c",
+      "name": "Append row in sheet",
+      "alwaysOutputData": false
+    },
+    {
+      "parameters": {
+        "jsCode": "const results = [];\n\n// ----------------------------\n// Noise filters\n// ----------------------------\n\n// Navigation / footer noise\nconst NAV_KEYWORDS = [\n  \"platform\", \"resources\", \"company\", \"product\", \"solutions\",\n  \"pricing\", \"careers\", \"blog\", \"hubs\", \"author\",\n  \"request a demo\", \"see\", \"explore\", \"meet the\",\n  \"startups\", \"global\", \"engineering\", \"finance\", \"hr\", \"it\",\n  \"contents\", \"see also\", \"references\", \"external links\", \"further reading\"\n];\n\n// CTA / marketing noise\nconst CTA_PATTERNS = [\n  \"request\", \"discover\", \"in action\", \"ensure your\"\n];\n\nfor (const item of items) {\n  const title = Array.isArray(item.json.title)\n    ? item.json.title.join(\" \")\n    : item.json.title || \"\";\n\n  const headings = Array.isArray(item.json.headings)\n    ? item.json.headings\n    : [];\n\n  let currentSection = null;\n  const outline = [];\n\n  for (const raw of headings) {\n    if (!raw) continue;\n\n    const text = raw.replace(/\\s+/g, \" \").trim();\n    const lower = text.toLowerCase();\n\n    if (!text) continue;\n    if (text.length > 160) continue;\n\n    // Skip navigation / footer noise\n    if (NAV_KEYWORDS.some(k => lower === k || lower.startsWith(k + \" \"))) {\n      continue;\n    }\n\n    // Skip CTAs\n    if (CTA_PATTERNS.some(p => lower.includes(p))) {\n      continue;\n    }\n\n    const isNumbered = /^\\d+\\./.test(text);\n\n    // ----------------------------\n    // Primary H2 detection (marketing / blog)\n    // ----------------------------\n    const isLikelyH2 =\n      lower.includes(\"what is\") ||\n      lower.includes(\"types of\") ||\n      lower.includes(\"how to\") ||\n      lower.includes(\"comparison\") ||\n      lower.includes(\"methodology\") ||\n      lower.includes(\"deep dive\") ||\n      lower.includes(\"challenges\") ||\n      lower.includes(\"benefits\") ||\n      lower.includes(\"use cases\") ||\n      lower.includes(\"best\") ||\n      lower.includes(\"top\") ||\n      text.endsWith(\"?\");\n\n    // ----------------------------\n    // Fallback H2 detection (Wikipedia / docs / RFCs)\n    // ----------------------------\n    const isFallbackH2 =\n      !currentSection &&\n      text.split(\" \").length <= 6 &&\n      /^[A-Z]/.test(text) &&\n      !NAV_KEYWORDS.includes(lower);\n\n    // ----------------------------\n    // H3 detection\n    // ----------------------------\n    const isLikelyH3 =\n      isNumbered ||\n      (\n        currentSection &&\n        text.split(\" \").length <= 8 &&\n        !lower.includes(\"what is\") &&\n        !lower.includes(\"how to\")\n      );\n\n    // ----------------------------\n    // Apply hierarchy\n    // ----------------------------\n    if (isLikelyH2 || isFallbackH2) {\n      currentSection = { h2: text, h3: [] };\n      outline.push(currentSection);\n      continue;\n    }\n\n    if (isLikelyH3 && currentSection) {\n      currentSection.h3.push(text);\n    }\n  }\n\n  // ----------------------------\n  // SAFETY NET: never return empty\n  // ----------------------------\n  if (outline.length === 0 && headings.length) {\n    outline.push({\n      h2: title || \"Overview\",\n      h3: headings.slice(0, 10)\n    });\n  }\n\n  // ----------------------------\n  // Flatten for downstream nodes\n  // ----------------------------\n  for (const section of outline) {\n    results.push({\n      json: {\n        title,\n        h2: section.h2,\n        h3: Array.isArray(section.h3) ? section.h3.join(\" | \") : \"\"\n      }\n    });\n  }\n}\n\nreturn results;\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1264,
+        1200
+      ],
+      "id": "d8e642c4-4f6a-4130-9035-ef6c6e80336a",
+      "name": "Code in JavaScript2"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1hRJ5G5B9geJZN11LNmcn-n4gdNxtfH_H_9ghGub4vwQ",
+          "mode": "list",
+          "cachedResultName": "SEO_Keyword_Agent",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1hRJ5G5B9geJZN11LNmcn-n4gdNxtfH_H_9ghGub4vwQ/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "source code",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1hRJ5G5B9geJZN11LNmcn-n4gdNxtfH_H_9ghGub4vwQ/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -3584,
+        1488
+      ],
+      "id": "15846e8d-0871-4c51-8473-232a6400f1a0",
+      "name": "Get row(s) in sheet",
+      "executeOnce": false,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "4KWntwejoQUi4Wkz",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        -2192,
+        1184
+      ],
+      "id": "883b8526-393e-49c1-86e5-873b5c660736",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {
+        "amount": 45
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        -624,
+        1200
+      ],
+      "id": "cb4b49d4-8cc9-4dd8-b286-d3d40825af7e",
+      "name": "Wait1",
+      "webhookId": "6c6fb7a4-0814-4069-bbef-f1ba360bc22e"
+    },
+    {
+      "parameters": {
+        "schemaType": "manual",
+        "inputSchema": "{\n  \"type\": \"object\",\n  \"required\": [\"title\", \"h1\", \"outline\"],\n  \"properties\": {\n    \"title\": { \"type\": \"string\" },\n    \"h1\": { \"type\": \"string\" },\n    \"outline\": {\n      \"type\": \"array\",\n      \"items\": {\n        \"type\": \"object\",\n        \"required\": [\"h2\"],\n        \"properties\": {\n          \"h2\": { \"type\": \"string\" },\n          \"h3\": {\n            \"type\": \"array\",\n            \"items\": { \"type\": \"string\" }\n          }\n        }\n      }\n    },\n    \"faqs\": {\n      \"type\": \"array\",\n      \"items\": { \"type\": \"string\" }\n    }\n  }\n}\n"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        2064,
+        1504
+      ],
+      "id": "ba3a74ae-514f-46bb-9a7d-473325575df3",
+      "name": "Structured Output Parser1"
+    },
+    {
+      "parameters": {
+        "jsCode": "const rows = [];\n\nconst data = items[0].json.output;\n\nlet isFirstRow = true;\n\nfor (const section of data.outline) {\n  rows.push({\n    json: {\n      title: isFirstRow ? (data.title || \"\") : \"\",\n      h1: isFirstRow ? (data.h1 || \"\") : \"\",\n      h2: section.h2 || \"\",\n\n      // Each H3 on a new line\n      h3: Array.isArray(section.h3)\n        ? section.h3.join(\"\\n\")\n        : \"\",\n\n      // Each FAQ on a new line (only in first row)\n      faqs: isFirstRow && Array.isArray(data.faqs)\n        ? data.faqs.join(\"\\n\")\n        : \"\"\n    }\n  });\n\n  isFirstRow = false;\n}\n\nreturn rows;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2816,
+        544
+      ],
+      "id": "6a1ed011-f214-49c5-a114-63424825ca04",
+      "name": "Code in JavaScript4"
+    },
+    {
+      "parameters": {
+        "jsCode": "const rows = [];\n\nfor (const item of items) {\n  rows.push({\n    json: {\n      primary_keyword: item.json.primary_keyword || \"\",\n\n      // each keyword on a new line\n      secondary_keywords: Array.isArray(item.json.secondary_keywords)\n        ? item.json.secondary_keywords.join(\"\\n\")\n        : \"\",\n\n      other_relevant_keywords: Array.isArray(item.json.other_relevant_keywords)\n        ? item.json.other_relevant_keywords.join(\"\\n\")\n        : \"\"\n    }\n  });\n}\n\nreturn rows;\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2816,
+        864
+      ],
+      "id": "2d5ff835-92e0-45d9-901d-3eb7a87e6e9f",
+      "name": "Code in JavaScript5"
+    },
+    {
+      "parameters": {
+        "numberInputs": 3
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        3744,
+        560
+      ],
+      "id": "8aa724d9-97f9-403a-b9ef-8cf08f4f36fd",
+      "name": "Merge1"
+    },
+    {
+      "parameters": {
+        "jsCode": "const blockedDomains = [\n  // Communities\n  'reddit.com',\n  'quora.com',\n  'stackoverflow.com',\n  'stackexchange.com',\n  'spiceworks.com',\n  'community.ptc.com',\n  'community.okta.com',\n  'community.cloudflare.com',\n\n  // Analyst / Research\n  'gartner.com',\n  'gartnerpeerinsights.com',\n  'forrester.com',\n  'idc.com',\n\n  // Review Sites\n  'g2.com',\n  'trustpilot.com',\n  'capterra.com',\n  'getapp.com',\n  'softwareadvice.com',\n  'glassdoor.com',\n\n  // Social Media\n  'linkedin.com',\n  'facebook.com',\n  'twitter.com',\n  'x.com',\n\n  // Other problematic sites\n  'medium.com',\n  'saner.ai',\n  'hipaajournal.com',\n  'withpersona.com',\n  'thectoclub.com',\n\n  // Frequently protected by anti-bot systems\n  'ticketmaster.com',\n  'stubhub.com',\n  'nike.com',\n  'bestbuy.com',\n\n  // Documentation sites that often rate-limit\n  'learn.microsoft.com',\n  'developers.cloudflare.com',\n  'supertokens.com',\n  'rfideas.com',\n  \n  // Block Cloudflare learning pages\n  'cloudflare.com'\n];\n\nconst urls = [];\nconst seen = new Set();\n\nfor (const item of items) {\n\n  const results = item.json.urls || [];\n\n  for (const result of results) {\n\n    const url = result.link;\n\n    if (!url) continue;\n\n    const lowerUrl = url.toLowerCase();\n\n    const isBlocked = blockedDomains.some(domain =>\n      lowerUrl.includes(domain)\n    );\n\n    if (isBlocked) continue;\n\n    // Remove duplicates\n    if (seen.has(lowerUrl)) continue;\n\n    seen.add(lowerUrl);\n\n    urls.push({\n      json: {\n        link: url\n      }\n    });\n  }\n}\n\n// Return first 6 usable competitor URLs\nreturn urls.slice(0, 6);"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -2640,
+        1184
+      ],
+      "id": "459837bf-a53e-4f3e-b34a-fa30acf2b2d4",
+      "name": "Code in JavaScript7"
+    },
+    {
+      "parameters": {
+        "schemaType": "manual",
+        "inputSchema": "{\n  \"type\": \"object\",\n  \"required\": [\"title\", \"h1\", \"outline\", \"faqs\"],\n  \"additionalProperties\": false,\n  \"properties\": {\n    \"title\": {\n      \"type\": \"string\"\n    },\n    \"h1\": {\n      \"type\": \"string\"\n    },\n    \"outline\": {\n      \"type\": \"array\",\n      \"minItems\": 6,\n      \"maxItems\": 8,\n      \"items\": {\n        \"type\": \"object\",\n        \"required\": [\"h2\", \"h3\"],\n        \"additionalProperties\": false,\n        \"properties\": {\n          \"h2\": {\n            \"type\": \"string\"\n          },\n          \"h3\": {\n            \"type\": \"array\",\n            \"items\": {\n              \"type\": \"string\"\n            }\n          }\n        }\n      }\n    },\n    \"faqs\": {\n      \"type\": \"array\",\n      \"minItems\": 4,\n      \"maxItems\": 4,\n      \"items\": {\n        \"type\": \"string\"\n      }\n    }\n  }\n}\n"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        2064,
+        1056
+      ],
+      "id": "d30fc4d0-0fcf-4193-a0e6-d5941cd83340",
+      "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {
+        "schemaType": "manual",
+        "inputSchema": "{\n  \"type\": \"object\",\n  \"required\": [\"title\", \"h1\", \"outline\"],\n  \"properties\": {\n    \"title\": { \"type\": \"string\" },\n    \"h1\": { \"type\": \"string\" },\n    \"outline\": {\n      \"type\": \"array\",\n      \"items\": {\n        \"type\": \"object\",\n        \"required\": [\"h2\"],\n        \"properties\": {\n          \"h2\": { \"type\": \"string\" },\n          \"h3\": {\n            \"type\": \"array\",\n            \"items\": { \"type\": \"string\" }\n          }\n        }\n      }\n    },\n    \"faqs\": {\n      \"type\": \"array\",\n      \"items\": { \"type\": \"string\" }\n    }\n  }\n}\n"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        2032,
+        1904
+      ],
+      "id": "a508159e-c25a-47d9-a7e4-1092205db733",
+      "name": "Structured Output Parser2"
+    },
+    {
+      "parameters": {
+        "schemaType": "manual",
+        "inputSchema": "{\n  \"type\": \"object\",\n  \"required\": [\"title\", \"h1\", \"outline\"],\n  \"properties\": {\n    \"title\": { \"type\": \"string\" },\n    \"h1\": { \"type\": \"string\" },\n    \"outline\": {\n      \"type\": \"array\",\n      \"items\": {\n        \"type\": \"object\",\n        \"required\": [\"h2\"],\n        \"properties\": {\n          \"h2\": { \"type\": \"string\" },\n          \"h3\": {\n            \"type\": \"array\",\n            \"items\": { \"type\": \"string\" }\n          }\n        }\n      }\n    },\n    \"faqs\": {\n      \"type\": \"array\",\n      \"items\": { \"type\": \"string\" }\n    }\n  }\n}\n"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        2016,
+        608
+      ],
+      "id": "f9552a32-1fe3-43c9-becb-fd682c0f2ed8",
+      "name": "Structured Output Parser3"
+    },
+    {
+      "parameters": {
+        "schemaType": "manual",
+        "inputSchema": "{\n  \"type\": \"object\",\n  \"required\": [\"title\", \"h1\", \"outline\"],\n  \"properties\": {\n    \"title\": { \"type\": \"string\" },\n    \"h1\": { \"type\": \"string\" },\n    \"outline\": {\n      \"type\": \"array\",\n      \"items\": {\n        \"type\": \"object\",\n        \"required\": [\"h2\"],\n        \"properties\": {\n          \"h2\": { \"type\": \"string\" },\n          \"h3\": {\n            \"type\": \"array\",\n            \"items\": { \"type\": \"string\" }\n          }\n        }\n      }\n    },\n    \"faqs\": {\n      \"type\": \"array\",\n      \"items\": { \"type\": \"string\" }\n    }\n  }\n}\n"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        2080,
+        2272
+      ],
+      "id": "5fa6a1a9-a8e5-48d3-b24a-8df22e9caa51",
+      "name": "Structured Output Parser4"
+    },
+    {
+      "parameters": {
+        "inputText": "={{ $json.text_for_classification }}",
+        "categories": {
+          "categories": [
+            {
+              "category": "WHAT_IS",
+              "description": "what is, best practices, concept defenitions"
+            },
+            {
+              "category": "TOOLS_COMPARISON",
+              "description": "tool vs tool, software vs software, vendors vs vendors, providers vs providers, pricing vs pricing, features vs features"
+            },
+            {
+              "category": "CHECKLIST",
+              "description": "audit, migration, migration checklist, audit checklist, compliance checklist, review checklist, compliance audit"
+            },
+            {
+              "category": "ALTERNATIVES",
+              "description": "Alternatives, competitors"
+            },
+            {
+              "category": "CONCEPT_COMPARISON",
+              "description": "concept vs concept, feature vs feature"
+            },
+            {
+              "category": "SOLUTION",
+              "description": "solutions, software, tools, providers,vendors, solution"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.textClassifier",
+      "typeVersion": 1.1,
+      "position": [
+        96,
+        1456
+      ],
+      "id": "f03d96dd-5e81-46f9-b55e-e2aed6b2827a",
+      "name": "Text Classifier"
+    },
+    {
+      "parameters": {
+        "jsCode": "const grouped = {};\n\nlet primary_keyword = \"\";\nlet secondary_keywords = [];\nlet other_relevant_keywords = [];\n\nfor (const item of items) {\n\n  // Capture keyword data\n  if (item.json.primary_keyword) {\n    primary_keyword = item.json.primary_keyword;\n    secondary_keywords = item.json.secondary_keywords || [];\n    other_relevant_keywords = item.json.other_relevant_keywords || [];\n    continue;\n  }\n\n  // Process competitor headings\n  const title = item.json.title?.trim();\n  const h2 = item.json.h2?.trim();\n  const h3raw = item.json.h3?.trim();\n\n  if (!title) continue;\n\n  if (!grouped[title]) {\n    grouped[title] = {\n      title,\n      outline: []\n    };\n  }\n\n  if (!h2) continue;\n\n  let h3 = [];\n\n  if (h3raw) {\n    h3 = h3raw\n      .split(\"|\")\n      .map(v => v.replace(/^\\d+\\.\\s*/, \"\").trim())\n      .filter(Boolean);\n  }\n\n  const exists = grouped[title].outline.find(\n    section => section.h2 === h2\n  );\n\n  if (!exists) {\n    grouped[title].outline.push({\n      h2,\n      h3\n    });\n  }\n}\n\n// Build competitor signals\nlet competitorSignals = [];\n\nObject.values(grouped).forEach((competitor) => {\n\n  competitorSignals.push(\n    `Competitor Title: ${competitor.title}`\n  );\n\n  competitor.outline.forEach((section) => {\n\n    competitorSignals.push(\n      `H2: ${section.h2}`\n    );\n\n    (section.h3 || []).forEach((sub) => {\n      competitorSignals.push(\n        `H3: ${sub}`\n      );\n    });\n\n  });\n\n});\n\n// Final text for classifier\nconst textForClassification = `\nPrimary Keyword:\n${primary_keyword}\n\nSecondary Keywords:\n${secondary_keywords.join(\", \")}\n\nOther Relevant Keywords:\n${other_relevant_keywords.join(\", \")}\n\nCompetitor Content Signals:\n${competitorSignals.join(\"\\n\")}\n`;\n\nreturn [\n  {\n    json: {\n      text_for_classification: textForClassification.trim()\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -240,
+        1520
+      ],
+      "id": "e462704c-a3c3-440a-82e3-76728bf3304c",
+      "name": "Code in JavaScript8"
+    },
+    {
+      "parameters": {
+        "jsCode": "const text = items[0].json.text_for_classification;\n\n// -------- helpers ----------\nconst getSection = (label, nextLabel) => {\n  const regex = new RegExp(\n    `${label}:([\\\\s\\\\S]*?)${nextLabel ? nextLabel + \":\" : \"$\"}`\n  );\n  const match = text.match(regex);\n  return match ? match[1].trim() : \"\";\n};\n\n// -------- keyword extraction ----------\nconst primary_keyword = getSection(\"Primary Keyword\", \"Secondary Keywords\")\n  .split(\"\\n\")[0]\n  .trim();\n\nconst secondary_keywords = getSection(\"Secondary Keywords\", \"Other Relevant Keywords\")\n  .split(\",\")\n  .map(k => k.trim())\n  .filter(Boolean);\n\nconst other_relevant_keywords = getSection(\n  \"Other Relevant Keywords\",\n  \"Competitor Content Signals\"\n)\n  .split(\",\")\n  .map(k => k.trim())\n  .filter(Boolean);\n\n// -------- competitor parsing ----------\nconst competitorBlock = getSection(\"Competitor Content Signals\");\nconst competitorChunks = competitorBlock.split(\"Competitor Title:\").slice(1);\n\nconst competitors = competitorChunks.map(chunk => {\n  const lines = chunk.trim().split(\"\\n\").map(l => l.trim()).filter(Boolean);\n\n  const title = lines.shift();\n\n  const outline = [];\n  let currentH2 = null;\n\n  lines.forEach(line => {\n    if (line.startsWith(\"H2:\")) {\n      currentH2 = {\n        h2: line.replace(\"H2:\", \"\").trim(),\n        h3: []\n      };\n      outline.push(currentH2);\n    } else if (line.startsWith(\"H3:\") && currentH2) {\n      currentH2.h3.push(line.replace(\"H3:\", \"\").trim());\n    }\n  });\n\n  return { title, outline };\n});\n\n// -------- final output ----------\nreturn [\n  {\n    json: {\n      primary_keyword,\n      secondary_keywords,\n      other_relevant_keywords,\n      competitors\n    }\n  }\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        928,
+        416
+      ],
+      "id": "35548851-bb4e-40a6-9edb-14abbf0d367e",
+      "name": "Code in JavaScript9"
+    },
+    {
+      "parameters": {
+        "jsCode": "const text = items[0].json.text_for_classification;\n\n// -------- helpers ----------\nconst getSection = (label, nextLabel) => {\n  const regex = new RegExp(\n    `${label}:([\\\\s\\\\S]*?)${nextLabel ? nextLabel + \":\" : \"$\"}`\n  );\n  const match = text.match(regex);\n  return match ? match[1].trim() : \"\";\n};\n\n// -------- keyword extraction ----------\nconst primary_keyword = getSection(\"Primary Keyword\", \"Secondary Keywords\")\n  .split(\"\\n\")[0]\n  .trim();\n\nconst secondary_keywords = getSection(\"Secondary Keywords\", \"Other Relevant Keywords\")\n  .split(\",\")\n  .map(k => k.trim())\n  .filter(Boolean);\n\nconst other_relevant_keywords = getSection(\n  \"Other Relevant Keywords\",\n  \"Competitor Content Signals\"\n)\n  .split(\",\")\n  .map(k => k.trim())\n  .filter(Boolean);\n\n// -------- competitor parsing ----------\nconst competitorBlock = getSection(\"Competitor Content Signals\");\nconst competitorChunks = competitorBlock.split(\"Competitor Title:\").slice(1);\n\nconst competitors = competitorChunks.map(chunk => {\n  const lines = chunk.trim().split(\"\\n\").map(l => l.trim()).filter(Boolean);\n\n  const title = lines.shift();\n\n  const outline = [];\n  let currentH2 = null;\n\n  lines.forEach(line => {\n    if (line.startsWith(\"H2:\")) {\n      currentH2 = {\n        h2: line.replace(\"H2:\", \"\").trim(),\n        h3: []\n      };\n      outline.push(currentH2);\n    } else if (line.startsWith(\"H3:\") && currentH2) {\n      currentH2.h3.push(line.replace(\"H3:\", \"\").trim());\n    }\n  });\n\n  return { title, outline };\n});\n\n// -------- final output ----------\nreturn [\n  {\n    json: {\n      primary_keyword,\n      secondary_keywords,\n      other_relevant_keywords,\n      competitors\n    }\n  }\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        928,
+        864
+      ],
+      "id": "09763a5e-0897-4519-927f-17ae78fd52e6",
+      "name": "Code in JavaScript10"
+    },
+    {
+      "parameters": {
+        "jsCode": "const text = items[0].json.text_for_classification;\n\n// -------- helpers ----------\nconst getSection = (label, nextLabel) => {\n  const regex = new RegExp(\n    `${label}:([\\\\s\\\\S]*?)${nextLabel ? nextLabel + \":\" : \"$\"}`\n  );\n  const match = text.match(regex);\n  return match ? match[1].trim() : \"\";\n};\n\n// -------- keyword extraction ----------\nconst primary_keyword = getSection(\"Primary Keyword\", \"Secondary Keywords\")\n  .split(\"\\n\")[0]\n  .trim();\n\nconst secondary_keywords = getSection(\"Secondary Keywords\", \"Other Relevant Keywords\")\n  .split(\",\")\n  .map(k => k.trim())\n  .filter(Boolean);\n\nconst other_relevant_keywords = getSection(\n  \"Other Relevant Keywords\",\n  \"Competitor Content Signals\"\n)\n  .split(\",\")\n  .map(k => k.trim())\n  .filter(Boolean);\n\n// -------- competitor parsing ----------\nconst competitorBlock = getSection(\"Competitor Content Signals\");\nconst competitorChunks = competitorBlock.split(\"Competitor Title:\").slice(1);\n\nconst competitors = competitorChunks.map(chunk => {\n  const lines = chunk.trim().split(\"\\n\").map(l => l.trim()).filter(Boolean);\n\n  const title = lines.shift();\n\n  const outline = [];\n  let currentH2 = null;\n\n  lines.forEach(line => {\n    if (line.startsWith(\"H2:\")) {\n      currentH2 = {\n        h2: line.replace(\"H2:\", \"\").trim(),\n        h3: []\n      };\n      outline.push(currentH2);\n    } else if (line.startsWith(\"H3:\") && currentH2) {\n      currentH2.h3.push(line.replace(\"H3:\", \"\").trim());\n    }\n  });\n\n  return { title, outline };\n});\n\n// -------- final output ----------\nreturn [\n  {\n    json: {\n      primary_keyword,\n      secondary_keywords,\n      other_relevant_keywords,\n      competitors\n    }\n  }\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        912,
+        1280
+      ],
+      "id": "cc4fa874-541f-41ee-b4da-7fec218927ce",
+      "name": "Code in JavaScript11"
+    },
+    {
+      "parameters": {
+        "jsCode": "const text = items[0].json.text_for_classification;\n\n// -------- helpers ----------\nconst getSection = (label, nextLabel) => {\n  const regex = new RegExp(\n    `${label}:([\\\\s\\\\S]*?)${nextLabel ? nextLabel + \":\" : \"$\"}`\n  );\n  const match = text.match(regex);\n  return match ? match[1].trim() : \"\";\n};\n\n// -------- keyword extraction ----------\nconst primary_keyword = getSection(\"Primary Keyword\", \"Secondary Keywords\")\n  .split(\"\\n\")[0]\n  .trim();\n\nconst secondary_keywords = getSection(\"Secondary Keywords\", \"Other Relevant Keywords\")\n  .split(\",\")\n  .map(k => k.trim())\n  .filter(Boolean);\n\nconst other_relevant_keywords = getSection(\n  \"Other Relevant Keywords\",\n  \"Competitor Content Signals\"\n)\n  .split(\",\")\n  .map(k => k.trim())\n  .filter(Boolean);\n\n// -------- competitor parsing ----------\nconst competitorBlock = getSection(\"Competitor Content Signals\");\nconst competitorChunks = competitorBlock.split(\"Competitor Title:\").slice(1);\n\nconst competitors = competitorChunks.map(chunk => {\n  const lines = chunk.trim().split(\"\\n\").map(l => l.trim()).filter(Boolean);\n\n  const title = lines.shift();\n\n  const outline = [];\n  let currentH2 = null;\n\n  lines.forEach(line => {\n    if (line.startsWith(\"H2:\")) {\n      currentH2 = {\n        h2: line.replace(\"H2:\", \"\").trim(),\n        h3: []\n      };\n      outline.push(currentH2);\n    } else if (line.startsWith(\"H3:\") && currentH2) {\n      currentH2.h3.push(line.replace(\"H3:\", \"\").trim());\n    }\n  });\n\n  return { title, outline };\n});\n\n// -------- final output ----------\nreturn [\n  {\n    json: {\n      primary_keyword,\n      secondary_keywords,\n      other_relevant_keywords,\n      competitors\n    }\n  }\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        928,
+        1680
+      ],
+      "id": "a223ec88-afcd-4a1e-a766-e1ce821f1918",
+      "name": "Code in JavaScript12"
+    },
+    {
+      "parameters": {
+        "jsCode": "const text = items[0].json.text_for_classification;\n\n// -------- helpers ----------\nconst getSection = (label, nextLabel) => {\n  const regex = new RegExp(\n    `${label}:([\\\\s\\\\S]*?)${nextLabel ? nextLabel + \":\" : \"$\"}`\n  );\n  const match = text.match(regex);\n  return match ? match[1].trim() : \"\";\n};\n\n// -------- keyword extraction ----------\nconst primary_keyword = getSection(\"Primary Keyword\", \"Secondary Keywords\")\n  .split(\"\\n\")[0]\n  .trim();\n\nconst secondary_keywords = getSection(\"Secondary Keywords\", \"Other Relevant Keywords\")\n  .split(\",\")\n  .map(k => k.trim())\n  .filter(Boolean);\n\nconst other_relevant_keywords = getSection(\n  \"Other Relevant Keywords\",\n  \"Competitor Content Signals\"\n)\n  .split(\",\")\n  .map(k => k.trim())\n  .filter(Boolean);\n\n// -------- competitor parsing ----------\nconst competitorBlock = getSection(\"Competitor Content Signals\");\nconst competitorChunks = competitorBlock.split(\"Competitor Title:\").slice(1);\n\nconst competitors = competitorChunks.map(chunk => {\n  const lines = chunk.trim().split(\"\\n\").map(l => l.trim()).filter(Boolean);\n\n  const title = lines.shift();\n\n  const outline = [];\n  let currentH2 = null;\n\n  lines.forEach(line => {\n    if (line.startsWith(\"H2:\")) {\n      currentH2 = {\n        h2: line.replace(\"H2:\", \"\").trim(),\n        h3: []\n      };\n      outline.push(currentH2);\n    } else if (line.startsWith(\"H3:\") && currentH2) {\n      currentH2.h3.push(line.replace(\"H3:\", \"\").trim());\n    }\n  });\n\n  return { title, outline };\n});\n\n// -------- final output ----------\nreturn [\n  {\n    json: {\n      primary_keyword,\n      secondary_keywords,\n      other_relevant_keywords,\n      competitors\n    }\n  }\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        928,
+        2064
+      ],
+      "id": "25772fd5-c70b-4444-9e6a-06a8f175b6a1",
+      "name": "Code in JavaScript13"
+    },
+    {
+      "parameters": {
+        "schemaType": "manual",
+        "inputSchema": "{\n  \"type\": \"object\",\n  \"required\": [\"title\", \"h1\", \"outline\"],\n  \"properties\": {\n    \"title\": { \"type\": \"string\" },\n    \"h1\": { \"type\": \"string\" },\n    \"outline\": {\n      \"type\": \"array\",\n      \"items\": {\n        \"type\": \"object\",\n        \"required\": [\"h2\"],\n        \"properties\": {\n          \"h2\": { \"type\": \"string\" },\n          \"h3\": {\n            \"type\": \"array\",\n            \"items\": { \"type\": \"string\" }\n          }\n        }\n      }\n    },\n    \"faqs\": {\n      \"type\": \"array\",\n      \"items\": { \"type\": \"string\" }\n    }\n  }\n}\n"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        2112,
+        2736
+      ],
+      "id": "769f937a-5f74-4fda-bc05-5d50b9e76cea",
+      "name": "Structured Output Parser5"
+    },
+    {
+      "parameters": {
+        "jsCode": "const text = items[0].json.text_for_classification;\n\n// -------- helpers ----------\nconst getSection = (label, nextLabel) => {\n  const regex = new RegExp(\n    `${label}:([\\\\s\\\\S]*?)${nextLabel ? nextLabel + \":\" : \"$\"}`\n  );\n  const match = text.match(regex);\n  return match ? match[1].trim() : \"\";\n};\n\n// -------- keyword extraction ----------\nconst primary_keyword = getSection(\"Primary Keyword\", \"Secondary Keywords\")\n  .split(\"\\n\")[0]\n  .trim();\n\nconst secondary_keywords = getSection(\"Secondary Keywords\", \"Other Relevant Keywords\")\n  .split(\",\")\n  .map(k => k.trim())\n  .filter(Boolean);\n\nconst other_relevant_keywords = getSection(\n  \"Other Relevant Keywords\",\n  \"Competitor Content Signals\"\n)\n  .split(\",\")\n  .map(k => k.trim())\n  .filter(Boolean);\n\n// -------- competitor parsing ----------\nconst competitorBlock = getSection(\"Competitor Content Signals\");\nconst competitorChunks = competitorBlock.split(\"Competitor Title:\").slice(1);\n\nconst competitors = competitorChunks.map(chunk => {\n  const lines = chunk.trim().split(\"\\n\").map(l => l.trim()).filter(Boolean);\n\n  const title = lines.shift();\n\n  const outline = [];\n  let currentH2 = null;\n\n  lines.forEach(line => {\n    if (line.startsWith(\"H2:\")) {\n      currentH2 = {\n        h2: line.replace(\"H2:\", \"\").trim(),\n        h3: []\n      };\n      outline.push(currentH2);\n    } else if (line.startsWith(\"H3:\") && currentH2) {\n      currentH2.h3.push(line.replace(\"H3:\", \"\").trim());\n    }\n  });\n\n  return { title, outline };\n});\n\n// -------- final output ----------\nreturn [\n  {\n    json: {\n      primary_keyword,\n      secondary_keywords,\n      other_relevant_keywords,\n      competitors\n    }\n  }\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        928,
+        2528
+      ],
+      "id": "37b65f62-01f2-40d8-82d0-37192c00ec44",
+      "name": "Code in JavaScript14"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-3.5-flash-lite",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        1664,
+        1488
+      ],
+      "id": "3030c33e-361d-412d-9ea5-929ae58ce566",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "tJh3z54UQ2YPc6dq",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-3.5-flash-lite",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        1648,
+        1040
+      ],
+      "id": "549afc3b-b817-4782-81c3-638f24185d70",
+      "name": "Google Gemini Chat Model1",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "tJh3z54UQ2YPc6dq",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-3.5-flash-lite",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        1664,
+        688
+      ],
+      "id": "0e058c2b-7a1a-4bc0-b808-6336ed9d653a",
+      "name": "Google Gemini Chat Model2",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "tJh3z54UQ2YPc6dq",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-3.5-flash-lite",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        1648,
+        1888
+      ],
+      "id": "f7369e8c-1f94-4c45-9260-7f10baa6b67b",
+      "name": "Google Gemini Chat Model3",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "tJh3z54UQ2YPc6dq",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-3.5-flash-lite",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        1648,
+        2256
+      ],
+      "id": "a4f468ce-1d5f-473a-9e83-d724f1ab7c09",
+      "name": "Google Gemini Chat Model4",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "tJh3z54UQ2YPc6dq",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-3.5-flash-lite",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        1648,
+        2720
+      ],
+      "id": "4311d20d-858f-443d-9772-1ea8459e7575",
+      "name": "Google Gemini Chat Model5",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "tJh3z54UQ2YPc6dq",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-3.5-flash-lite",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        96,
+        1744
+      ],
+      "id": "1e95f789-1d97-49e7-a639-997984decbf8",
+      "name": "Google Gemini Chat Model6"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-3.1-flash-lite",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        4352,
+        1152
+      ],
+      "id": "d962faf9-6ccc-420f-9794-d4f387cadf5a",
+      "name": "Google Gemini Chat Model7",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "tJh3z54UQ2YPc6dq",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "schemaType": "manual",
+        "inputSchema": "{\n  \"missing_h2s\": [\n    {\n      \"heading\": \"\"\n    }\n  ],\n  \"missing_h3s\": [\n    {\n      \"parent_h2\": \"\",\n      \"heading\": \"\"\n    }\n  ],\n  \"missing_faqs\": [\n    {\n      \"question\": \"\"\n    }\n  ],\n  \"missing_keywords\": [\n    {\n      \"keyword\": \"\",\n      \"reason\": \"\"\n    }\n  ],\n  \"content_gap_summary\": \"\"\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        4640,
+        1136
+      ],
+      "id": "98e68a17-c550-4dfa-ba20-18199e31d09d",
+      "name": "Structured Output Parser6"
+    },
+    {
+      "parameters": {
+        "jsCode": "const result = {\n  primary_keyword: \"\",\n  secondary_keywords: [],\n  other_relevant_keywords: [],\n  generated_outline: [],\n  competitor_outline: []\n};\n\nfor (const item of items) {\n\n  // Keywords record\n  if (item.json.primary_keyword) {\n    result.primary_keyword = item.json.primary_keyword;\n\n    result.secondary_keywords =\n      typeof item.json.secondary_keywords === \"string\"\n        ? item.json.secondary_keywords\n            .split(\"\\n\")\n            .map(k => k.trim())\n            .filter(Boolean)\n        : [];\n\n    result.other_relevant_keywords =\n      typeof item.json.other_relevant_keywords === \"string\"\n        ? item.json.other_relevant_keywords\n            .split(\"\\n\")\n            .map(k => k.trim())\n            .filter(Boolean)\n        : [];\n  }\n\n  // Generated outline rows\n  if (item.json.h2 || item.json.h3) {\n\n    result.generated_outline.push({\n      title: item.json.title || \"\",\n      h2: item.json.h2 || \"\",\n      h3: item.json.h3\n        ? item.json.h3.split(\"|\").map(v => v.trim()).filter(Boolean)\n        : []\n    });\n\n  }\n\n  // Competitor rows (if present)\n  if (item.json.competitor_title) {\n\n    result.competitor_outline.push({\n      title: item.json.competitor_title,\n      h2: item.json.competitor_h2 || \"\",\n      h3: item.json.competitor_h3\n        ? item.json.competitor_h3.split(\"|\").map(v => v.trim())\n        : []\n    });\n\n  }\n}\n\nreturn [\n  {\n    json: result\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3968,
+        880
+      ],
+      "id": "dac7ba8c-1d07-4eed-ac71-dc51b0ae72aa",
+      "name": "Code in JavaScript16"
+    },
+    {
+      "parameters": {
+        "numberInputs": 3
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        3856,
+        1568
+      ],
+      "id": "b2091557-c9eb-46eb-a312-8c525a451206",
+      "name": "Merge2"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-3.5-flash-lite",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        4400,
+        1856
+      ],
+      "id": "67c88889-011d-407a-8ebb-30aedff8f7dc",
+      "name": "Google Gemini Chat Model8",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "tJh3z54UQ2YPc6dq",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "schemaType": "manual",
+        "inputSchema": "{\n  \"primary_persona\": {\n    \"role\": \"\",\n    \"job_title\": \"\",\n    \"experience_level\": \"\",\n    \"responsibilities\": [],\n    \"pain_points\": []\n  },\n\n  \"secondary_persona\": {\n    \"role\": \"\",\n    \"job_title\": \"\",\n    \"experience_level\": \"\",\n    \"responsibilities\": [],\n    \"pain_points\": []\n  },\n\n  \"tertiary_persona\": {\n    \"role\": \"\",\n    \"job_title\": \"\",\n    \"experience_level\": \"\",\n    \"responsibilities\": [],\n    \"pain_points\": []\n  },\n\n  \"buyer_journey_stage\": \"\",\n\n  \"user_intent\": \"\",\n\n  \"user_motivations\": [],\n\n  \"decision_factors\": [],\n\n  \"content_expectations\": [],\n\n  \"recommended_content_angle\": \"\",\n\n  \"recommended_cta\": \"\",\n\n  \"persona_summary\": \"\"\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        4688,
+        1840
+      ],
+      "id": "36963223-c670-4586-9268-48f78e0c81b3",
+      "name": "Structured Output Parser7"
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = $input.all();\n\nlet result = {\n  intent_type: \"\",\n  primary_keyword: \"\",\n  secondary_keywords: [],\n  other_relevant_keywords: [],\n  generated_outline: [],\n  content_gap_analysis: {}\n};\n\nfor (const item of data) {\n  const json = item.json;\n\n  // Primary Keyword\n  if (json.primary_keyword) {\n    result.primary_keyword = json.primary_keyword;\n  }\n\n  // Secondary Keywords\n  if (json.secondary_keywords) {\n    result.secondary_keywords = Array.isArray(json.secondary_keywords)\n      ? json.secondary_keywords\n      : String(json.secondary_keywords)\n          .split(\"\\n\")\n          .map(v => v.trim())\n          .filter(Boolean);\n  }\n\n  // Other Relevant Keywords\n  if (json.other_relevant_keywords) {\n    result.other_relevant_keywords = Array.isArray(json.other_relevant_keywords)\n      ? json.other_relevant_keywords\n      : String(json.other_relevant_keywords)\n          .split(\"\\n\")\n          .map(v => v.trim())\n          .filter(Boolean);\n  }\n\n  // Generated Outline Rows\n  if (\n    json.title ||\n    json.h1 ||\n    json.h2 ||\n    json.h3 ||\n    json.faqs\n  ) {\n    result.generated_outline.push({\n      title: json.title || \"\",\n      h1: json.h1 || \"\",\n      h2: json.h2 || \"\",\n      h3: json.h3 || \"\",\n      faqs: json.faqs || \"\"\n    });\n  }\n\n  // Content Gap Analysis Output\n  if (json.output) {\n    result.content_gap_analysis = json.output;\n\n    // Promote intent_type to root level\n    if (json.output.intent_type) {\n      result.intent_type = json.output.intent_type;\n    }\n  }\n\n  // Fallback if intent_type already exists at root\n  if (json.intent_type && !result.intent_type) {\n    result.intent_type = json.intent_type;\n  }\n}\n\n// Final fallback\nif (\n  !result.intent_type &&\n  result.content_gap_analysis &&\n  result.content_gap_analysis.intent_type\n) {\n  result.intent_type = result.content_gap_analysis.intent_type;\n}\n\nreturn [\n  {\n    json: result\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        4048,
+        1584
+      ],
+      "id": "f0f360d5-1b27-47d3-bee3-ded04a7ac82e",
+      "name": "Code in JavaScript17"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=SYSTEM ROLE\n\nYou are a Senior B2B SEO Audience Research Strategist and Search Intent Specialist.\n\nYour task is to identify the most likely audience personas behind the target keyword based on:\n\n1. Intent Type\n2. Keyword Research Signals\n3. Generated Content Outline\n4. Content Gap Analysis Insights\n\nYou are NOT generating content.\n\nYou are identifying:\n\n- WHO the content should be written for\n- WHY they are searching\n- WHAT problems they are trying to solve\n- WHAT information they need before taking action\n\n━━━━━━━━━━━━━━━━━━━━━━\nINPUT DATA\n━━━━━━━━━━━━━━━━━━━━━━\n\nIntent Type:\n{{ $json.intent_type }}\n\nPrimary Keyword:\n{{ $json.primary_keyword }}\n\nSecondary Keywords:\n{{ JSON.stringify($json.secondary_keywords) }}\n\nOther Relevant Keywords:\n{{ JSON.stringify($json.other_relevant_keywords) }}\n\nGenerated Outline:\n{{ JSON.stringify($json.generated_outline) }}\n\nContent Gap Analysis:\n{{ JSON.stringify($json.content_gap_analysis) }}\n\n━━━━━━━━━━━━━━━━━━━━━━\nINTENT-SPECIFIC PERSONA FRAMEWORK\n━━━━━━━━━━━━━━━━━━━━━━\n\nThe Intent Type has already been classified.\n\nYou MUST use the provided Intent Type as the source of truth.\n\nDO NOT re-classify intent.\n\n━━━━━━━━━━━━━━━━━━━━━━\n\nIF Intent Type = INFORMATIONAL\n\nFocus On:\n\n- Learners\n- Researchers\n- Developers\n- Students\n- Technical Practitioners\n\nIdentify:\n\n- Knowledge gaps\n- Learning objectives\n- Educational motivations\n\n━━━━━━━━━━━━━━━━━━━━━━\n\nIF Intent Type = SOLUTION\n\nFocus On:\n\n- IT Managers\n- Security Leaders\n- IAM Architects\n- Enterprise Architects\n- Technology Decision Makers\n- Digital Transformation Leaders\n\nIdentify:\n\n- Business problems\n- Security concerns\n- Technical challenges\n- Solution evaluation requirements\n\n━━━━━━━━━━━━━━━━━━━━━━\n\nIF Intent Type = TOOLS_COMPARISON\n\nFocus On:\n\n- Buyers\n- Product Evaluators\n- Procurement Teams\n- Technical Decision Makers\n\nIdentify:\n\n- Vendor selection criteria\n- Feature comparison requirements\n- Purchase decision factors\n\n━━━━━━━━━━━━━━━━━━━━━━\n\nIF Intent Type = CONCEPT_COMPARISON\n\nFocus On:\n\n- Engineers\n- Architects\n- Technical Evaluators\n\nIdentify:\n\n- Architecture decisions\n- Technology tradeoffs\n- Implementation implications\n\n━━━━━━━━━━━━━━━━━━━━━━\n\nIF Intent Type = CHECKLIST\n\nFocus On:\n\n- Implementers\n- Operations Teams\n- Administrators\n- Deployment Teams\n\nIdentify:\n\n- Implementation concerns\n- Execution requirements\n- Validation needs\n\n━━━━━━━━━━━━━━━━━━━━━━\n\nIF Intent Type = ALTERNATIVES\n\nFocus On:\n\n- Existing Product Users\n- Migration Teams\n- Replacement Evaluators\n- Enterprise Decision Makers\n\nIdentify:\n\n- Switching motivations\n- Migration concerns\n- Alternative evaluation criteria\n\n━━━━━━━━━━━━━━━━━━━━━━\nANALYSIS PROCESS\n━━━━━━━━━━━━━━━━━━━━━━\n\nSTEP 1\n\nAnalyze Intent Type.\n\nDetermine:\n\n- Why users are searching\n- What information they expect\n- What decisions they need to make\n- Their likely research stage\n\n━━━━━━━━━━━━━━━━━━━━━━\n\nSTEP 2\n\nAnalyze Keyword Signals.\n\nIdentify:\n\n- Commercial intent\n- Enterprise intent\n- Technical intent\n- Educational intent\n\nDetermine audience sophistication level.\n\n━━━━━━━━━━━━━━━━━━━━━━\n\nSTEP 3\n\nAnalyze Generated Outline.\n\nDetermine:\n\n- Technical depth\n- Complexity level\n- Business focus\n- Audience expertise level\n\n━━━━━━━━━━━━━━━━━━━━━━\n\nSTEP 4\n\nAnalyze Content Gap Analysis.\n\nDetermine:\n\n- Missing audience concerns\n- Missing decision criteria\n- Business challenges\n- Technical challenges\n\n━━━━━━━━━━━━━━━━━━━━━━\n\nSTEP 5\n\nIdentify Personas.\n\nDetermine:\n\n- Primary Persona\n- Secondary Persona\n- Additional Persona (only if strongly supported)\n\nFor EACH persona return:\n\n- Role\n- Responsibilities\n- Current Challenges\n- Business Risks\n- Technical Risks\n- Desired Outcomes\n- Why They Are Searching\n\nEvery field must contain meaningful descriptive text.\n\n━━━━━━━━━━━━━━━━━━━━━━\n\nSTEP 6\n\nIdentify Audience Motivations.\n\nDetermine:\n\n- Main Pain Points\n- Main Goals\n- Key Decision Factors\n- Desired Outcomes\n\n━━━━━━━━━━━━━━━━━━━━━━\n\nSTEP 7\n\nDetermine Buyer Journey Stage.\n\nChoose ONE:\n\n- Awareness\n- Consideration\n- Decision\n\n━━━━━━━━━━━━━━━━━━━━━━\n\nSTEP 8\n\nDetermine Recommended Content Angle.\n\nChoose ONE:\n\n- Educational Guide\n- Buyer's Guide\n- Vendor Comparison\n- Implementation Guide\n- Technical Deep Dive\n- Best Practices Guide\n- Strategic Decision Framework\n\n━━━━━━━━━━━━━━━━━━━━━━\nIMPORTANT RULES\n━━━━━━━━━━━━━━━━━━━━━━\n\nDO NOT generate article content.\n\nDO NOT rewrite the outline.\n\nDO NOT recommend vendors.\n\nDO NOT create SEO recommendations.\n\nDO NOT re-classify Intent Type.\n\nUse the provided Intent Type as the source of truth.\n\nEvery persona must contain descriptive text.\n\nNever return:\n\n- Empty arrays\n- Numbers\n- IDs\n- Null values\n- Placeholder values\n\nOnly return personas strongly supported by:\n\n- Intent Type\n- Keyword Signals\n- Generated Outline\n- Content Gap Analysis\n\nAvoid generic personas.\n\nPrioritize enterprise stakeholders when enterprise signals are present.\n\n━━━━━━━━━━━━━━━━━━━━━━\nOUTPUT\n━━━━━━━━━━━━━━━━━━━━━━\n\nReturn JSON only.\n\n{\n  \"intent_type\": \"\",\n  \"primary_persona\": {\n    \"role\": \"\",\n    \"responsibilities\": \"\",\n    \"current_challenges\": \"\",\n    \"business_risks\": \"\",\n    \"technical_risks\": \"\",\n    \"desired_outcomes\": \"\",\n    \"why_they_are_searching\": \"\"\n  },\n  \"secondary_persona\": {\n    \"role\": \"\",\n    \"responsibilities\": \"\",\n    \"current_challenges\": \"\",\n    \"business_risks\": \"\",\n    \"technical_risks\": \"\",\n    \"desired_outcomes\": \"\",\n    \"why_they_are_searching\": \"\"\n  },\n  \"additional_persona\": {\n    \"role\": \"\",\n    \"responsibilities\": \"\",\n    \"current_challenges\": \"\",\n    \"business_risks\": \"\",\n    \"technical_risks\": \"\",\n    \"desired_outcomes\": \"\",\n    \"why_they_are_searching\": \"\"\n  },\n  \"pain_points\": [],\n  \"goals\": [],\n  \"decision_factors\": [],\n  \"desired_outcomes\": [],\n  \"buyer_journey_stage\": \"\",\n  \"content_angle\": \"\",\n  \"analysis_summary\": \"\"\n}",
+        "hasOutputParser": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        4464,
+        1584
+      ],
+      "id": "0c6bb4dd-92b4-45fe-ae84-000992601523",
+      "name": "Audience Persona Agent"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=SYSTEM ROLE\n\nYou are a Senior SEO Content Gap Analyst and Enterprise Search Strategist.\n\nYour task is to compare:\n\n1. Generated Content Outline\n2. Competitor Content Structures\n3. Keyword Research Signals\n4. Search Intent Type\n\nand identify strategic content opportunities that are not fully covered.\n\nYou are NOT rewriting the outline.\n\nYou are performing a competitive content gap audit.\n\n━━━━━━━━━━━━━━━━━━━━━━\nINPUT DATA\n━━━━━━━━━━━━━━━━━━━━━━\n\nIntent Type:\n{{ $json.intent_type }}\n\nPrimary Keyword:\n{{ $json.primary_keyword }}\n\nSecondary Keywords:\n{{ JSON.stringify($json.secondary_keywords) }}\n\nOther Relevant Keywords:\n{{ JSON.stringify($json.other_relevant_keywords) }}\n\nGenerated Outline:\n{{ JSON.stringify($json.generated_outline) }}\n\nCompetitor Outline:\n{{ JSON.stringify($json.competitor_outline) }}\n\n━━━━━━━━━━━━━━━━━━━━━━\nINTENT-SPECIFIC ANALYSIS FRAMEWORK\n━━━━━━━━━━━━━━━━━━━━━━\n\nThe Intent Type has already been classified.\n\nYou MUST analyze content gaps according to the provided Intent Type.\n\n──────────────────────\n\nINFORMATIONAL\n\nFocus On:\n\n- Definitions\n- Concepts\n- How it Works\n- Benefits\n- Use Cases\n- Examples\n- Educational Content\n- Beginner FAQs\n\nIdentify Missing:\n\n- Educational sections\n- Concept explanations\n- Beginner guidance\n- Examples\n- Learning-focused FAQs\n\n──────────────────────\n\nSOLUTION\n\nFocus On:\n\n- Problem solving\n- Enterprise implementation\n- Security considerations\n- Deployment models\n- Buyer evaluation\n- Business outcomes\n- ROI\n- Adoption guidance\n\nIdentify Missing:\n\n- Implementation guidance\n- Security sections\n- Deployment recommendations\n- Evaluation frameworks\n- Business use cases\n- Buyer decision content\n- ROI considerations\n\n──────────────────────\n\nTOOLS_COMPARISON\n\nFocus On:\n\n- Vendor comparisons\n- Product evaluations\n- Features\n- Pricing\n- Integrations\n- Pros and Cons\n- Selection criteria\n\nIdentify Missing:\n\n- Comparison tables\n- Feature comparisons\n- Pricing discussions\n- Vendor strengths\n- Vendor weaknesses\n- Alternative tools\n- Buyer evaluation criteria\n\n──────────────────────\n\nCONCEPT_COMPARISON\n\nFocus On:\n\n- Differences\n- Similarities\n- Advantages\n- Disadvantages\n- Selection guidance\n- Real-world usage\n\nIdentify Missing:\n\n- Comparison frameworks\n- Side-by-side comparisons\n- Decision matrices\n- Use-case comparisons\n- Pros vs Cons sections\n- Selection guidance\n\n──────────────────────\n\nCHECKLIST\n\nFocus On:\n\n- Step-by-step processes\n- Implementation stages\n- Requirements\n- Validation\n- Risk reduction\n\nIdentify Missing:\n\n- Checklist items\n- Prerequisites\n- Validation steps\n- Execution stages\n- Best practices\n- Common mistakes\n- Success criteria\n\n──────────────────────\n\nALTERNATIVES\n\nFocus On:\n\n- Alternative solutions\n- Competitor replacements\n- Migration planning\n- Switching decisions\n- Trade-offs\n\nIdentify Missing:\n\n- Alternative providers\n- Migration guidance\n- Switching considerations\n- Replacement strategies\n- Competitive differentiation\n- Alternative comparison FAQs\n\n━━━━━━━━━━━━━━━━━━━━━━\nANALYSIS PROCESS\n━━━━━━━━━━━━━━━━━━━━━━\n\nSTEP 1\n\nAnalyze Competitor Outlines.\n\nIdentify:\n\n- Frequently repeated H2s\n- Frequently repeated H3s\n- Common FAQs\n- Common decision-making sections\n- Common implementation sections\n- Common comparison sections\n- Common security sections\n\nAlso identify patterns specifically relevant to the provided Intent Type.\n\n━━━━━━━━━━━━━━━━━━━━━━\n\nSTEP 2\n\nAnalyze Generated Outline.\n\nDetermine:\n\n- Fully covered topics\n- Partially covered topics\n- Missing topics\n\nEvaluate coverage against the expectations of the provided Intent Type.\n\n━━━━━━━━━━━━━━━━━━━━━━\n\nSTEP 3\n\nAnalyze Keyword Coverage.\n\nCheck:\n\n- Primary Keyword coverage\n- Secondary Keyword coverage\n- Other Relevant Keyword coverage\n\nIdentify missing keyword opportunities that improve intent satisfaction.\n\n━━━━━━━━━━━━━━━━━━━━━━\n\nSTEP 4\n\nPerform Content Gap Detection.\n\nPrioritize gaps that:\n\n- Appear across multiple competitors\n- Improve intent satisfaction\n- Improve topical authority\n- Improve E-E-A-T\n- Improve commercial value when applicable\n\nIdentify:\n\n- Missing H2s\n- Missing H3s\n- Missing FAQs\n- Missing Keywords\n\nOnly return gaps relevant to the provided Intent Type.\n\n━━━━━━━━━━━━━━━━━━━━━━\nIMPORTANT RULES\n━━━━━━━━━━━━━━━━━━━━━━\n\nDO NOT rewrite the outline.\n\nDO NOT generate a new outline.\n\nDO NOT suggest sections unrelated to the provided Intent Type.\n\nDO NOT return generic SEO recommendations.\n\nOnly return strategic gaps.\n\nAvoid duplicates.\n\nPrioritize gaps repeated across multiple competitors.\n\nReturn concise and actionable recommendations.\n\n━━━━━━━━━━━━━━━━━━━━━━\nOUTPUT\n━━━━━━━━━━━━━━━━━━━━━━\n\nReturn JSON only.\n\n{\n  \"intent_type\": \"\",\n  \"missing_h2s\": [],\n  \"missing_h3s\": [],\n  \"missing_faqs\": [],\n  \"missing_keywords\": [],\n  \"content_gap_summary\": \"\"\n}",
+        "hasOutputParser": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        4416,
+        880
+      ],
+      "id": "60ca4cf1-bbc0-4b8d-88d5-243e4d2edc68",
+      "name": "Content Gap Analysis"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-3.5-flash-lite",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        4304,
+        2704
+      ],
+      "id": "ca78330d-b98e-4480-9a82-587bab104a0f",
+      "name": "Google Gemini Chat Model9",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "tJh3z54UQ2YPc6dq",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "schemaType": "manual",
+        "inputSchema": "{\n  \"content_type\": \"\",\n  \"content_positioning\": \"\",\n  \"primary_content_goal\": \"\",\n\n  \"priority_topics\": [],\n\n  \"content_strengths\": [],\n\n  \"content_improvement_opportunities\": [],\n\n  \"differentiation_strategy\": [],\n\n  \"conversion_strategy\": [],\n\n  \"recommended_cta\": \"\",\n\n  \"target_buyer_stage\": \"\",\n\n  \"competitive_advantage\": \"\",\n\n  \"content_strategy_summary\": \"\"\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        4592,
+        2688
+      ],
+      "id": "567a3b1c-35d5-4347-8392-1944b3cc5b72",
+      "name": "Structured Output Parser8"
+    },
+    {
+      "parameters": {
+        "jsCode": "const result = {\n  primary_keyword: \"\",\n  secondary_keywords: [],\n  other_relevant_keywords: [],\n\n  intent_type: \"\",\n\n  generated_outline: [],\n\n  content_gap_analysis: {},\n\n  audience_persona: {}\n};\n\nfor (const item of $input.all()) {\n\n  const json = item.json;\n\n  // Keywords\n  if (json.primary_keyword) {\n    result.primary_keyword = json.primary_keyword;\n  }\n\n  if (json.secondary_keywords) {\n    result.secondary_keywords = Array.isArray(json.secondary_keywords)\n      ? json.secondary_keywords\n      : String(json.secondary_keywords)\n          .split('\\n')\n          .map(v => v.trim())\n          .filter(Boolean);\n  }\n\n  if (json.other_relevant_keywords) {\n    result.other_relevant_keywords = Array.isArray(json.other_relevant_keywords)\n      ? json.other_relevant_keywords\n      : String(json.other_relevant_keywords)\n          .split('\\n')\n          .map(v => v.trim())\n          .filter(Boolean);\n  }\n\n  // Generated Outline\n  if (\n    json.title ||\n    json.h1 ||\n    json.h2 ||\n    json.h3 ||\n    json.faqs\n  ) {\n    result.generated_outline.push({\n      title: json.title || \"\",\n      h1: json.h1 || \"\",\n      h2: json.h2 || \"\",\n      h3: json.h3 || \"\",\n      faqs: json.faqs || \"\"\n    });\n  }\n\n  // Content Gap Analysis Output\n  if (\n    json.output &&\n    json.output.missing_h2s\n  ) {\n    result.content_gap_analysis = json.output;\n\n    if (json.output.intent_type) {\n      result.intent_type = json.output.intent_type;\n    }\n  }\n\n  // Audience Persona Output\n  if (\n    json.output &&\n    json.output.primary_persona\n  ) {\n    result.audience_persona = json.output;\n\n    if (!result.intent_type && json.output.intent_type) {\n      result.intent_type = json.output.intent_type;\n    }\n  }\n}\n\nreturn [\n  {\n    json: result\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3952,
+        2432
+      ],
+      "id": "8653fb79-e339-4772-b252-532d2e97dfb4",
+      "name": "Code in JavaScript18"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=SYSTEM ROLE\n\nYou are a Senior Content Strategist, SEO Consultant, and Enterprise Content Planning Specialist.\n\nYour task is to create a content strategy based on:\n\n1. Intent Type\n2. Target Keyword\n3. Generated Content Outline\n4. Content Gap Analysis\n5. Audience Persona Research\n\nYou are NOT writing the article.\n\nYou are creating the strategy behind the article.\n\n━━━━━━━━━━━━━━━━━━━━━━\nINPUT DATA\n━━━━━━━━━━━━━━━━━━━━━━\n\nIntent Type:\n{{ $json.intent_type }}\n\nPrimary Keyword:\n{{ $json.primary_keyword }}\n\nSecondary Keywords:\n{{ JSON.stringify($json.secondary_keywords) }}\n\nOther Relevant Keywords:\n{{ JSON.stringify($json.other_relevant_keywords) }}\n\nGenerated Outline:\n{{ JSON.stringify($json.generated_outline) }}\n\nContent Gap Analysis:\n{{ JSON.stringify($json.content_gap_analysis) }}\n\nAudience Persona:\n{{ JSON.stringify($json.audience_persona) }}\n\n━━━━━━━━━━━━━━━━━━━━━━\nINTENT-SPECIFIC STRATEGY FRAMEWORK\n━━━━━━━━━━━━━━━━━━━━━━\n\nThe Intent Type has already been classified.\n\nYou MUST use the provided Intent Type as the primary strategy driver.\n\n━━━━━━━━━━━━━━━━━━━━━━\n\nIF Intent Type = INFORMATIONAL\n\nFocus On:\n\n- Educational depth\n- Topic authority\n- Concept explanation\n- Beginner guidance\n- Knowledge building\n\nContent Goal:\n\n- Teach\n- Explain\n- Build trust\n- Establish authority\n\nRecommended Content Types:\n\n- Educational Guide\n- Beginner Guide\n- Complete Guide\n- Technical Guide\n- Best Practices Guide\n\nRecommended Content Angles:\n\n- Educational Leadership\n- Topic Authority\n- Knowledge Building\n- Concept Clarity\n\n━━━━━━━━━━━━━━━━━━━━━━\n\nIF Intent Type = SOLUTION\n\nFocus On:\n\n- Problem solving\n- Business outcomes\n- Solution evaluation\n- Implementation considerations\n- Risk reduction\n\nContent Goal:\n\n- Help users evaluate solutions\n- Support decision making\n- Demonstrate business value\n\nRecommended Content Types:\n\n- Buyer's Guide\n- Solution Evaluation Guide\n- Strategic Decision Framework\n- Implementation Guide\n\nRecommended Content Angles:\n\n- Security First\n- Cost Optimization\n- Enterprise Scalability\n- Risk Reduction\n- Compliance Readiness\n\n━━━━━━━━━━━━━━━━━━━━━━\n\nIF Intent Type = TOOLS_COMPARISON\n\nFocus On:\n\n- Vendor comparison\n- Feature comparison\n- Pricing comparison\n- Strengths and weaknesses\n- Evaluation criteria\n\nContent Goal:\n\n- Help users choose a product\n- Support vendor selection\n\nRecommended Content Types:\n\n- Vendor Comparison Guide\n- Product Comparison Guide\n- Buyer's Guide\n- Evaluation Framework\n\nRecommended Content Angles:\n\n- Vendor Evaluation\n- Feature Comparison\n- Pricing Transparency\n- Purchase Decision Support\n\n━━━━━━━━━━━━━━━━━━━━━━\n\nIF Intent Type = CONCEPT_COMPARISON\n\nFocus On:\n\n- Differences\n- Tradeoffs\n- Architecture decisions\n- Use cases\n- Technology selection\n\nContent Goal:\n\n- Help users choose an approach\n- Explain key differences\n\nRecommended Content Types:\n\n- Comparison Guide\n- Architecture Decision Framework\n- Technical Deep Dive\n\nRecommended Content Angles:\n\n- Architecture Decision Making\n- Tradeoff Analysis\n- Technology Selection\n- Design Considerations\n\n━━━━━━━━━━━━━━━━━━━━━━\n\nIF Intent Type = CHECKLIST\n\nFocus On:\n\n- Execution\n- Implementation\n- Validation\n- Deployment readiness\n- Operational success\n\nContent Goal:\n\n- Help users successfully execute\n- Reduce implementation mistakes\n\nRecommended Content Types:\n\n- Checklist Guide\n- Implementation Guide\n- Deployment Guide\n- Operational Playbook\n\nRecommended Content Angles:\n\n- Implementation Success\n- Deployment Readiness\n- Operational Efficiency\n- Risk Mitigation\n\n━━━━━━━━━━━━━━━━━━━━━━\n\nIF Intent Type = ALTERNATIVES\n\nFocus On:\n\n- Switching solutions\n- Migration planning\n- Replacement evaluation\n- Alternative options\n- Risk mitigation\n\nContent Goal:\n\n- Help users evaluate alternatives\n- Support migration decisions\n\nRecommended Content Types:\n\n- Alternatives Guide\n- Migration Guide\n- Replacement Evaluation Framework\n\nRecommended Content Angles:\n\n- Migration Readiness\n- Vendor Replacement\n- Cost Optimization\n- Risk Reduction\n\n━━━━━━━━━━━━━━━━━━━━━━\nCONTENT TYPE DEFINITIONS\n━━━━━━━━━━━━━━━━━━━━━━\n\nRecommended Content Type MUST be a single article format.\n\nAllowed values:\n\n- Educational Guide\n- Beginner Guide\n- Complete Guide\n- Technical Guide\n- Best Practices Guide\n- Buyer's Guide\n- Solution Evaluation Guide\n- Implementation Guide\n- Strategic Decision Framework\n- Vendor Comparison Guide\n- Product Comparison Guide\n- Evaluation Framework\n- Comparison Guide\n- Technical Deep Dive\n- Architecture Decision Framework\n- Checklist Guide\n- Deployment Guide\n- Operational Playbook\n- Alternatives Guide\n- Migration Guide\n- Replacement Evaluation Framework\n\nDo not create new content types.\n\nDo not combine multiple content types.\n\n━━━━━━━━━━━━━━━━━━━━━━\nCONTENT ANGLE DEFINITIONS\n━━━━━━━━━━━━━━━━━━━━━━\n\nRecommended Content Angle represents the strategic perspective of the content.\n\nAllowed examples:\n\n- Educational Leadership\n- Topic Authority\n- Knowledge Building\n- Concept Clarity\n- Security First\n- Cost Optimization\n- Enterprise Scalability\n- Risk Reduction\n- Compliance Readiness\n- Deployment Flexibility\n- Migration Readiness\n- Vendor Evaluation\n- Architecture Decision Making\n- Operational Efficiency\n- Implementation Success\n- Business Continuity\n- Performance Optimization\n- User Experience Improvement\n- Pricing Transparency\n- Purchase Decision Support\n- Tradeoff Analysis\n- Technology Selection\n\nRecommended Content Angle MUST be a single strategic perspective.\n\nDo not combine multiple angles.\n\nThe Content Angle must align with:\n\n- Intent Type\n- Audience Persona\n- Buyer Journey Stage\n- Pain Points\n- Goals\n- Decision Factors\n\n━━━━━━━━━━━━━━━━━━━━━━\nANALYSIS PROCESS\n━━━━━━━━━━━━━━━━━━━━━━\n\nSTEP 1\n\nAnalyze the Audience Persona.\n\nThe Audience Persona output is the primary source of truth for:\n\n- Buyer Journey Stage\n- Pain Points\n- Goals\n- Decision Factors\n- Content Angle\n\nIdentify:\n\n- Who the content is for\n- Their pain points\n- Their motivations\n- Their buying stage\n- Their decision factors\n\n━━━━━━━━━━━━━━━━━━━━━━\n\nSTEP 2\n\nAnalyze the Intent Type.\n\nDetermine:\n\n- Why users are searching\n- What information they expect\n- What decision they are trying to make\n- What content format best serves the intent\n\n━━━━━━━━━━━━━━━━━━━━━━\n\nSTEP 3\n\nAnalyze the Generated Outline.\n\nDetermine:\n\n- Current strengths\n- Weak sections\n- Missing strategic sections\n- Content depth level\n- Coverage gaps\n- Competitive weaknesses\n\n━━━━━━━━━━━━━━━━━━━━━━\n\nSTEP 4\n\nAnalyze Content Gap Analysis.\n\nReview:\n\n- Missing H2 opportunities\n- Missing H3 opportunities\n- Missing FAQs\n- Missing keyword opportunities\n- Missing decision-support information\n- Missing business considerations\n- Missing technical considerations\n\n━━━━━━━━━━━━━━━━━━━━━━\n\nSTEP 5\n\nBuild Content Strategy.\n\nDetermine:\n\n- Recommended content type\n- Recommended content angle\n- Recommended positioning\n- Differentiation strategy\n- Priority topics\n- Conversion strategy\n- Primary CTA\n\nAll recommendations must align with:\n\n- Intent Type\n- Buyer Journey Stage\n- Pain Points\n- Goals\n- Decision Factors\n\n━━━━━━━━━━━━━━━━━━━━━━\n\nSTEP 6\n\nCreate Competitive Strategy.\n\nIdentify:\n\n- What competitors are doing well\n- What competitors are missing\n- How this content can outperform competitors\n- What unique value should be emphasized\n\n━━━━━━━━━━━━━━━━━━━━━━\nIMPORTANT RULES\n━━━━━━━━━━━━━━━━━━━━━━\n\nDO NOT generate article content.\n\nDO NOT generate a new outline.\n\nDO NOT rewrite the outline.\n\nDO NOT recommend specific vendors unless already present in the competitor content.\n\nDO NOT create SEO metadata.\n\nDO NOT re-classify Intent Type.\n\nUse the provided Intent Type as the source of truth.\n\nAll recommendations must align with the provided Intent Type.\n\nThe Audience Persona output is the primary source of truth for:\n\n- Buyer Journey Stage\n- Pain Points\n- Goals\n- Decision Factors\n- Content Angle\n\nFocus only on strategy.\n\nProvide actionable recommendations.\n\nUse business-focused language.\n\nBase recommendations only on:\n\n- Intent Type\n- Audience Persona\n- Keyword Signals\n- Generated Outline\n- Content Gap Analysis\n\n━━━━━━━━━━━━━━━━━━━━━━\nOUTPUT\n━━━━━━━━━━━━━━━━━━━━━━\n\nReturn JSON only.\n\n{\n  \"intent_type\": \"\",\n  \"recommended_content_type\": \"\",\n  \"recommended_content_angle\": \"\",\n  \"recommended_positioning\": \"\",\n  \"differentiation_strategy\": \"\",\n  \"priority_topics\": [],\n  \"conversion_strategy\": \"\",\n  \"primary_cta\": \"\",\n  \"competitor_strengths\": [],\n  \"competitor_weaknesses\": [],\n  \"outperformance_strategy\": [],\n  \"strategy_summary\": \"\"\n}",
+        "hasOutputParser": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        4368,
+        2432
+      ],
+      "id": "455b001d-c3c0-4864-b069-ccce8ad3fbea",
+      "name": "Content Strategy Agent"
+    },
+    {
+      "parameters": {
+        "numberInputs": 4
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        3712,
+        2400
+      ],
+      "id": "52627895-d3ad-49ee-bf32-d04221283d2e",
+      "name": "Merge3"
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\n\nconst result = {\n  primary_keyword: \"\",\n  secondary_keywords: [],\n  other_relevant_keywords: [],\n  intent_type: \"\",\n\n  generated_outline: [],\n\n  content_gap_analysis: {},\n  audience_persona: {},\n  content_strategy: {}\n};\n\nfor (const item of items) {\n\n  const json = item.json;\n\n  // =========================\n  // Keyword Data\n  // =========================\n  if (json.primary_keyword) {\n\n    result.primary_keyword = json.primary_keyword;\n\n    result.secondary_keywords = Array.isArray(json.secondary_keywords)\n      ? json.secondary_keywords\n      : String(json.secondary_keywords || \"\")\n          .split(\"\\n\")\n          .map(k => k.trim())\n          .filter(Boolean);\n\n    result.other_relevant_keywords = Array.isArray(json.other_relevant_keywords)\n      ? json.other_relevant_keywords\n      : String(json.other_relevant_keywords || \"\")\n          .split(\"\\n\")\n          .map(k => k.trim())\n          .filter(Boolean);\n  }\n\n  // =========================\n  // Generated Outline\n  // =========================\n  if (\n    json.title ||\n    json.h1 ||\n    json.h2 ||\n    json.h3 ||\n    json.faqs\n  ) {\n    result.generated_outline.push({\n      title: json.title || \"\",\n      h1: json.h1 || \"\",\n      h2: json.h2 || \"\",\n      h3: json.h3 || \"\",\n      faqs: json.faqs || \"\"\n    });\n  }\n\n  // =========================\n  // Content Gap Analysis\n  // =========================\n  if (\n    json.output &&\n    json.output.missing_h2s\n  ) {\n\n    result.content_gap_analysis = json.output;\n\n    if (\n      !result.intent_type &&\n      json.output.intent_type\n    ) {\n      result.intent_type = json.output.intent_type;\n    }\n  }\n\n  // =========================\n  // Audience Persona\n  // =========================\n  if (\n    json.output &&\n    json.output.primary_persona\n  ) {\n\n    result.audience_persona = json.output;\n\n    if (\n      !result.intent_type &&\n      json.output.intent_type\n    ) {\n      result.intent_type = json.output.intent_type;\n    }\n  }\n\n  // =========================\n  // Content Strategy\n  // =========================\n  if (\n    json.output &&\n    json.output.recommended_content_type\n  ) {\n\n    result.content_strategy = json.output;\n\n    if (\n      !result.intent_type &&\n      json.output.intent_type\n    ) {\n      result.intent_type = json.output.intent_type;\n    }\n  }\n}\n\nreturn [\n  {\n    json: result\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        5600,
+        1568
+      ],
+      "id": "c3069a9c-18ab-4a6f-add9-c667f05750b7",
+      "name": "Code in JavaScript19"
+    },
+    {
+      "parameters": {
+        "numberInputs": 5
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        5376,
+        1520
+      ],
+      "id": "3c691918-624f-415e-8bc1-f5df30f8e989",
+      "name": "Merge4"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-3.5-flash-lite",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        5968,
+        1840
+      ],
+      "id": "0e37f2b4-8fa1-4562-936f-22153e9c5db2",
+      "name": "Google Gemini Chat Model10",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "tJh3z54UQ2YPc6dq",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "schemaType": "manual",
+        "inputSchema": "{\n  \"seo_recommendations\": {\n    \"search_intent\": \"\",\n    \"secondary_intent\": \"\",\n\n    \"recommended_content_type\": \"\",\n    \"recommended_content_format\": \"\",\n    \"recommended_word_count\": 0,\n\n    \"priority_keywords\": [],\n\n    \"keyword_placement_strategy\": {\n      \"title\": \"\",\n      \"h1\": \"\",\n      \"introduction\": \"\",\n      \"first_100_words\": \"\",\n      \"h2_sections\": [],\n      \"h3_sections\": [],\n      \"faq_section\": \"\",\n      \"conclusion\": \"\"\n    },\n\n    \"featured_snippet_opportunities\": [],\n\n    \"internal_linking_opportunities\": [],\n\n    \"eeat_recommendations\": [],\n\n    \"schema_recommendations\": [],\n\n    \"content_gap_opportunities\": {\n      \"priority_missing_h2s\": [],\n      \"priority_missing_h3s\": [],\n      \"priority_missing_faqs\": [],\n      \"priority_missing_keywords\": []\n    },\n\n    \"conversion_recommendations\": {\n      \"primary_cta\": \"\",\n      \"secondary_cta\": \"\",\n      \"lead_magnet\": \"\"\n    }\n  }\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        6256,
+        1824
+      ],
+      "id": "9bbbcd82-5484-40dc-8934-1ec93073fe5d",
+      "name": "Structured Output Parser9"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=SYSTEM ROLE\n\nYou are a Senior Technical SEO Strategist and Content Optimization Consultant.\n\nYour task is to analyze the provided SEO intelligence dataset and generate strategic SEO recommendations that will guide a future Content Generation Agent.\n\nYou are NOT generating article content.\n\nYou are generating SEO recommendations that maximize:\n\n1. Search Visibility\n2. Topical Authority\n3. Search Intent Satisfaction\n4. Content Coverage\n5. Organic Conversions\n\n━━━━━━━━━━━━━━━━━━━━━━\nINPUT DATA\n━━━━━━━━━━━━━━━━━━━━━━\n\nIntent Type:\n{{ $json.intent_type }}\n\nPrimary Keyword:\n{{ $json.primary_keyword }}\n\nSecondary Keywords:\n{{ JSON.stringify($json.secondary_keywords) }}\n\nOther Relevant Keywords:\n{{ JSON.stringify($json.other_relevant_keywords) }}\n\nGenerated Outline:\n{{ JSON.stringify($json.generated_outline) }}\n\nContent Gap Analysis:\n{{ JSON.stringify($json.content_gap_analysis) }}\n\nAudience Persona:\n{{ JSON.stringify($json.audience_persona) }}\n\nContent Strategy:\n{{ JSON.stringify($json.content_strategy) }}\n\n━━━━━━━━━━━━━━━━━━━━━━\nINTENT-SPECIFIC SEO FRAMEWORK\n━━━━━━━━━━━━━━━━━━━━━━\n\nThe Intent Type has already been classified.\n\nYou MUST use the provided Intent Type as the primary SEO recommendation driver.\n\n━━━━━━━━━━━━━━━━━━━━━━\n\nIF Intent Type = INFORMATIONAL\n\nPrioritize:\n\n- Educational coverage\n- Topic authority\n- Definitions\n- Beginner questions\n- Knowledge expansion\n\nSEO Goal:\n\n- Maximize informational visibility\n- Capture featured snippets\n- Build topical authority\n\n━━━━━━━━━━━━━━━━━━━━━━\n\nIF Intent Type = SOLUTION\n\nPrioritize:\n\n- Problem-solution mapping\n- Business outcomes\n- Decision support\n- Solution evaluation\n\nSEO Goal:\n\n- Capture solution-aware users\n- Support consideration-stage buyers\n\n━━━━━━━━━━━━━━━━━━━━━━\n\nIF Intent Type = TOOLS_COMPARISON\n\nPrioritize:\n\n- Vendor comparisons\n- Product evaluations\n- Feature differentiation\n- Pricing considerations\n\nSEO Goal:\n\n- Capture comparison intent\n- Support product selection\n\n━━━━━━━━━━━━━━━━━━━━━━\n\nIF Intent Type = CONCEPT_COMPARISON\n\nPrioritize:\n\n- Tradeoffs\n- Differences\n- Architecture decisions\n- Use cases\n\nSEO Goal:\n\n- Capture technical comparison searches\n\n━━━━━━━━━━━━━━━━━━━━━━\n\nIF Intent Type = CHECKLIST\n\nPrioritize:\n\n- Implementation steps\n- Validation\n- Execution support\n\nSEO Goal:\n\n- Capture implementation intent\n\n━━━━━━━━━━━━━━━━━━━━━━\n\nIF Intent Type = ALTERNATIVES\n\nPrioritize:\n\n- Migration topics\n- Switching considerations\n- Replacement evaluation\n\nSEO Goal:\n\n- Capture replacement intent\n\n━━━━━━━━━━━━━━━━━━━━━━\nSOURCE OF TRUTH\n━━━━━━━━━━━━━━━━━━━━━━\n\nThe Audience Persona and Content Strategy outputs are the primary source of truth for:\n\n- Buyer Journey Stage\n- Decision Factors\n- Content Type\n- Content Angle\n- Conversion Strategy\n- CTA Recommendations\n\nAll SEO recommendations must align with these outputs.\n\n━━━━━━━━━━━━━━━━━━━━━━\nSEO RECOMMENDATION ALIGNMENT\n━━━━━━━━━━━━━━━━━━━━━━\n\nThe Content Strategy output is the primary source of truth for:\n\n- recommended_content_type\n- recommended_content_angle\n- recommended_positioning\n- conversion_strategy\n- primary_cta\n\nThe Audience Persona output is the primary source of truth for:\n\n- buyer_journey_stage\n- pain_points\n- goals\n- decision_factors\n\nAll SEO recommendations MUST align with:\n\n- Intent Type\n- Buyer Journey Stage\n- Content Type\n- Content Angle\n- Conversion Strategy\n\nDO NOT generate recommendations that contradict the Content Strategy output.\n\nDO NOT generate recommendations that contradict the Audience Persona output.\n\n━━━━━━━━━━━━━━━━━━━━━━\nANALYSIS PROCESS\n━━━━━━━━━━━━━━━━━━━━━━\n\nSTEP 1 — Keyword Strategy\n\nAnalyze:\n\n- Primary keyword importance\n- Secondary keyword opportunities\n- Semantic keyword opportunities\n- Missing keyword opportunities\n\nDetermine which keywords deserve the highest optimization priority.\n\n━━━━━━━━━━━━━━━━━━━━━━\n\nSTEP 2 — Search Intent Alignment\n\nDetermine:\n\n- Primary search intent\n- Secondary search intent\n- Buyer journey alignment\n\nIdentify whether the content should prioritize:\n\n- Education\n- Evaluation\n- Comparison\n- Purchase Decision Support\n- Implementation Guidance\n\n━━━━━━━━━━━━━━━━━━━━━━\n\nSTEP 3 — Content Depth & Format\n\nDetermine:\n\n- Recommended content type\n- Recommended content depth\n- Recommended article length\n\nThe recommended content type MUST align with the Content Strategy output.\n\nDo NOT generate a different content type.\n\nRecommended Article Length must be one of:\n\n- 1000-1500\n- 1500-2500\n- 2500-4000\n- 4000+\n\nConsider:\n\n- Competitor coverage\n- Content gaps\n- Audience sophistication\n- Buyer journey stage\n- Intent Type\n\n━━━━━━━━━━━━━━━━━━━━━━\n\nSTEP 4 — Keyword Placement Strategy\n\nRecommend where the primary keyword should appear:\n\n- Title\n- H1\n- Introduction\n- First 100 Words\n- H2 Sections\n- H3 Sections\n- FAQ Section\n- Conclusion\n\nRecommend where secondary keywords should be naturally integrated.\n\n━━━━━━━━━━━━━━━━━━━━━━\n\nSTEP 5 — Featured Snippet Opportunities\n\nIdentify opportunities for:\n\n- Definitions\n- Comparisons\n- Decision Frameworks\n- Process Explanations\n- Best Practice Questions\n\nFocus on high-click and high-visibility SERP opportunities.\n\nRecommendations must align with Intent Type.\n\n━━━━━━━━━━━━━━━━━━━━━━\n\nSTEP 6 — Internal Linking Strategy\n\nRecommend internal linking opportunities.\n\nFocus on:\n\n- Educational Resources\n- Product Pages\n- Solution Pages\n- Industry Guides\n- Supporting Authority Content\n\nRecommendations must align with Buyer Journey Stage.\n\n━━━━━━━━━━━━━━━━━━━━━━\n\nSTEP 7 — EEAT Enhancement\n\nRecommend ways to improve:\n\n- Experience\n- Expertise\n- Authoritativeness\n- Trustworthiness\n\nExamples:\n\n- Case Studies\n- Expert Commentary\n- Industry Frameworks\n- Compliance Mapping\n- Original Research\n- Implementation Examples\n\nRecommendations must align with Content Strategy.\n\n━━━━━━━━━━━━━━━━━━━━━━\n\nSTEP 8 — Schema Opportunities\n\nRecommend schema types that align with search intent.\n\nSchema recommendations must be selected ONLY from:\n\n- Article\n- FAQPage\n- HowTo\n- SoftwareApplication\n- Organization\n- BreadcrumbList\n\nOnly recommend schemas directly supported by:\n\n- Intent Type\n- Content Strategy\n- Audience Persona\n\nDo not recommend irrelevant schemas.\n\n━━━━━━━━━━━━━━━━━━━━━━\n\nSTEP 9 — Content Gap Prioritization\n\nUsing Content Gap Analysis:\n\nIdentify:\n\n- Highest-priority missing H2s\n- Highest-priority missing H3s\n- Highest-priority missing FAQs\n- Highest-priority missing keywords\n\nReturn a maximum of 5 items per category.\n\nRank recommendations from highest SEO impact to lowest SEO impact.\n\nPrioritize based on:\n\n- Ranking impact\n- Search intent satisfaction\n- Content completeness\n- Buyer journey relevance\n\n━━━━━━━━━━━━━━━━━━━━━━\n\nSTEP 10 — Conversion Optimization\n\nRecommend:\n\n- Primary CTA\n- Secondary CTA\n- Lead Magnet\n\nRecommendations MUST align with:\n\n- Audience Persona\n- Buyer Journey Stage\n- Content Strategy\n- Intent Type\n\n━━━━━━━━━━━━━━━━━━━━━━\nOUTPUT FIELD DEFINITIONS\n━━━━━━━━━━━━━━━━━━━━━━\n\nrecommended_content_type\n\nMust exactly match the Content Strategy output.\n\nDo NOT create a new content type.\n\nDo NOT modify the content type.\n\nExamples:\n\n- Educational Guide\n- Beginner Guide\n- Complete Guide\n- Technical Guide\n- Best Practices Guide\n- Buyer's Guide\n- Solution Evaluation Guide\n- Strategic Decision Framework\n- Implementation Guide\n- Vendor Comparison Guide\n- Product Comparison Guide\n- Evaluation Framework\n- Comparison Guide\n- Technical Deep Dive\n- Architecture Decision Framework\n- Checklist Guide\n- Deployment Guide\n- Operational Playbook\n- Alternatives Guide\n- Migration Guide\n- Replacement Evaluation Framework\n\n━━━━━━━━━━━━━━━━━━━━━━\n\nrecommended_content_depth\n\nMust be one of:\n\n- Basic\n- Intermediate\n- Advanced\n- Comprehensive\n\n━━━━━━━━━━━━━━━━━━━━━━\n\nbuyer_journey_alignment\n\nMust be one of:\n\n- Awareness\n- Consideration\n- Decision\n\n━━━━━━━━━━━━━━━━━━━━━━\n\nrecommended_article_length\n\nMust be one of:\n\n- 1000-1500\n- 1500-2500\n- 2500-4000\n- 4000+\n━━━━━━━━━━━━━━━━━━━━━━\nIMPORTANT RULES\n━━━━━━━━━━━━━━━━━━━━━━\n\nDO NOT generate article content.\n\nDO NOT write article sections.\n\nDO NOT rewrite the outline.\n\nDO NOT create marketing copy.\n\nDO NOT recommend specific vendors.\n\nDO NOT create FAQs.\n\nDO NOT create titles.\n\nDO NOT create meta descriptions.\n\nDO NOT create article introductions.\n\nDO NOT create article conclusions.\n\nDO NOT re-classify Intent Type.\n\nUse the provided Intent Type as the source of truth.\n\nOnly provide strategic SEO recommendations.\n\nBase all recommendations exclusively on:\n\n- Intent Type\n- Keyword Signals\n- Generated Outline\n- Content Gap Analysis\n- Audience Persona\n- Content Strategy\n\nThe Content Strategy output is the primary source of truth for:\n\n- recommended_content_type\n- primary_cta\n- conversion_strategy\n\nDo not contradict those outputs.\n\nkeyword_placement_strategy MUST be returned as a JSON object.\n\nDo NOT return it as a stringified JSON object.\n\n━━━━━━━━━━━━━━━━━━━━━━\nSTRICT OUTPUT ENFORCEMENT\n━━━━━━━━━━━━━━━━━━━━━━\n\nReturn ONLY fields defined in the schema.\n\nDO NOT add extra fields.\n\nDO NOT add helper fields.\n\nDO NOT add validation fields.\n\nDO NOT add debug fields.\n\nDO NOT add reasoning fields.\n\nDO NOT add notes.\n\nDO NOT add comments.\n\nForbidden examples:\n\n- keyword_placement_strategyRecordFormat\n- keyword_placement_strategy_fixed_validation\n- validation_status\n- seo_score\n- confidence_score\n- notes\n- comments\n- reasoning\n\n━━━━━━━━━━━━━━━━━━━━━━\n\nkeyword_placement_strategy MUST be a JSON object.\n\nNOT:\n\n\"keyword_placement_strategy\": \"{...}\"\n\nYES:\n\n\"keyword_placement_strategy\": {\n  \"title\": \"\",\n  \"h1\": \"\",\n  \"introduction\": \"\",\n  \"first_100_words\": \"\",\n  \"h2_sections\": [],\n  \"h3_sections\": [],\n  \"faq_section\": [],\n  \"conclusion\": \"\"\n}\n\n━━━━━━━━━━━━━━━━━━━━━━\n\nMaximum Limits\n\nprimary_keyword_priority = 10\n\nsecondary_keyword_priority = 10\n\nsemantic_keyword_opportunities = 15\n\nfeatured_snippet_opportunities = 10\n\ninternal_linking_opportunities = 10\n\neeat_recommendations = 10\n\npriority_missing_h2s = 5\n\npriority_missing_h3s = 5\n\npriority_missing_faqs = 5\n\npriority_missing_keywords = 5\n\n━━━━━━━━━━━━━━━━━━━━━━\n\nBefore returning the response:\n\n1. Validate JSON structure.\n2. Validate all required fields exist.\n3. Validate no extra fields exist.\n4. Validate keyword_placement_strategy is an object.\n5. Validate array limits.\n6. Validate schema compliance.\n7. Regenerate if validation fails.\n━━━━━━━━━━━━━━━━━━━━━━\nOUTPUT RULES\n━━━━━━━━━━━━━━━━━━━━━━\n\nReturn ONLY a valid JSON object.\n\nDo NOT wrap JSON in quotes.\n\nDo NOT return markdown.\n\nDo NOT return code fences.\n\nDo NOT return explanations.\n\nThe output must preserve all nested objects exactly as defined in the schema.\n\nDo NOT convert nested objects into strings.\n\nAll arrays must remain arrays.\n\nAll objects must remain objects.\n\nThe response MUST exactly match this schema:\n\n{\n  \"intent_type\": \"\",\n  \"primary_keyword_priority\": [],\n  \"secondary_keyword_priority\": [],\n  \"semantic_keyword_opportunities\": [],\n  \"search_intent_focus\": \"\",\n  \"buyer_journey_alignment\": \"\",\n  \"recommended_content_type\": \"\",\n  \"recommended_content_depth\": \"\",\n  \"recommended_article_length\": \"\",\n  \"keyword_placement_strategy\": {\n    \"title\": \"\",\n    \"h1\": \"\",\n    \"introduction\": \"\",\n    \"first_100_words\": \"\",\n    \"h2_sections\": [],\n    \"h3_sections\": [],\n    \"faq_section\": [],\n    \"conclusion\": \"\"\n  },\n  \"featured_snippet_opportunities\": [],\n  \"internal_linking_opportunities\": [],\n  \"eeat_recommendations\": [],\n  \"schema_recommendations\": [],\n  \"priority_missing_h2s\": [],\n  \"priority_missing_h3s\": [],\n  \"priority_missing_faqs\": [],\n  \"priority_missing_keywords\": [],\n  \"primary_cta\": \"\",\n  \"secondary_cta\": \"\",\n  \"lead_magnet\": \"\",\n  \"seo_strategy_summary\": \"\"\n}",
+        "hasOutputParser": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        6032,
+        1568
+      ],
+      "id": "0bfc6952-6805-4468-8c80-bf18b5fdf687",
+      "name": "SEO Recommendation Agent"
+    },
+    {
+      "parameters": {
+        "height": 2784,
+        "width": 4064,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -4096,
+        320
+      ],
+      "typeVersion": 1,
+      "id": "e3704d14-ee13-42ae-a257-d086a062ce6f",
+      "name": "Sticky Note10"
+    },
+    {
+      "parameters": {
+        "numberInputs": 5
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        6560,
+        1488
+      ],
+      "id": "0cf6c268-159d-4b88-90f4-580f812b5352",
+      "name": "Merge5"
+    },
+    {
+      "parameters": {
+        "jsCode": "const itemsData = $input.all();\n\nconst result = {\n  generated_outline: {\n    sections: []\n  },\n  content_gap_analysis: {},\n  audience_persona: {},\n  content_strategy: {},\n  seo_recommendations: {},\n\n  primary_keyword: \"\",\n  secondary_keywords: \"\",\n  other_relevant_keywords: \"\"\n};\n\n// ====================================================\n// PROCESS INPUT DATA\n// ====================================================\n\nfor (const item of itemsData) {\n\n  const data = item.json;\n\n  // ====================================================\n  // GENERATED OUTLINE\n  // ====================================================\n\n  if (\n    data.title ||\n    data.h1 ||\n    data.h2 ||\n    data.h3 ||\n    data.faqs\n  ) {\n    result.generated_outline.sections.push({\n      title: data.title || \"\",\n      h1: data.h1 || \"\",\n      h2: data.h2 || \"\",\n      h3: data.h3 || \"\",\n      faqs: data.faqs || \"\"\n    });\n  }\n\n  // ====================================================\n  // KEYWORDS\n  // ====================================================\n\n  if (data.primary_keyword) {\n    result.primary_keyword = data.primary_keyword;\n  }\n\n  if (data.secondary_keywords) {\n    result.secondary_keywords = data.secondary_keywords;\n  }\n\n  if (data.other_relevant_keywords) {\n    result.other_relevant_keywords = data.other_relevant_keywords;\n  }\n\n  // ====================================================\n  // CONTENT GAP ANALYSIS\n  // ====================================================\n\n  if (\n    data.output &&\n    (\n      data.output.missing_h2s ||\n      data.output.missing_h3s ||\n      data.output.missing_faqs ||\n      data.output.missing_keywords\n    )\n  ) {\n    result.content_gap_analysis = data.output;\n  }\n\n  // ====================================================\n  // AUDIENCE PERSONA\n  // ====================================================\n\n  if (\n    data.output &&\n    (\n      data.output.primary_persona ||\n      data.output.secondary_persona ||\n      data.output.buyer_journey_stage\n    )\n  ) {\n    result.audience_persona = data.output;\n  }\n\n  // ====================================================\n  // CONTENT STRATEGY\n  // ====================================================\n\n  if (\n    data.output &&\n    (\n      data.output.recommended_positioning ||\n      data.output.strategy_summary ||\n      data.output.recommended_content_angle\n    )\n  ) {\n    result.content_strategy = data.output;\n  }\n\n  // ====================================================\n  // SEO RECOMMENDATIONS\n  // ====================================================\n\n  if (\n    data.output &&\n    data.output.keyword_placement_strategy &&\n    data.output.seo_strategy_summary\n  ) {\n    result.seo_recommendations = data.output;\n  }\n}\n\n// ====================================================\n// OUTLINE\n// ====================================================\n\nconst firstSection =\n  result.generated_outline.sections[0] || {};\n\n// ====================================================\n// OUTPUT FOR GOOGLE SHEETS\n// ====================================================\n\nreturn [\n  {\n    json: {\n\n      generated_date: new Date().toISOString(),\n\n      // ====================================================\n      // KEYWORDS\n      // ====================================================\n\n      primary_keyword:\n        result.primary_keyword || \"\",\n\n      secondary_keywords:\n        result.secondary_keywords || \"\",\n\n      other_relevant_keywords:\n        result.other_relevant_keywords || \"\",\n\n      // ====================================================\n      // OUTLINE\n      // ====================================================\n\n      content_title:\n        firstSection.title || \"\",\n\n      h1:\n        firstSection.h1 || \"\",\n\n      generated_h2s:\n        result.generated_outline.sections\n          .map(s => s.h2)\n          .filter(Boolean)\n          .join(\"\\n\"),\n\n      generated_h3s:\n        result.generated_outline.sections\n          .map(s => s.h3)\n          .filter(Boolean)\n          .join(\"\\n\"),\n\n      generated_faqs:\n        result.generated_outline.sections\n          .map(s => s.faqs)\n          .filter(Boolean)\n          .join(\"\\n\\n\"),\n\n      // ====================================================\n      // CONTENT GAP\n      // ====================================================\n\n      content_gap_summary:\n        result.content_gap_analysis.content_gap_summary || \"\",\n\n      missing_h2s:\n        (result.content_gap_analysis.missing_h2s || [])\n          .join(\"\\n\"),\n\n      missing_h3s:\n        (result.content_gap_analysis.missing_h3s || [])\n          .join(\"\\n\"),\n\n      missing_faqs:\n        (result.content_gap_analysis.missing_faqs || [])\n          .join(\"\\n\"),\n\n      missing_keywords:\n        (result.content_gap_analysis.missing_keywords || [])\n          .join(\"\\n\"),\n\n      // ====================================================\n      // AUDIENCE PERSONA\n      // ====================================================\n\n      buyer_journey_stage:\n        result.audience_persona.buyer_journey_stage || \"\",\n\n      primary_persona:\n        JSON.stringify(\n          result.audience_persona.primary_persona || {},\n          null,\n          2\n        ),\n\n      secondary_persona:\n        JSON.stringify(\n          result.audience_persona.secondary_persona || {},\n          null,\n          2\n        ),\n\n      additional_persona:\n        JSON.stringify(\n          result.audience_persona.additional_persona || {},\n          null,\n          2\n        ),\n\n      audience_goals:\n        (result.audience_persona.goals || [])\n          .join(\"\\n\"),\n\n      decision_factors:\n        (result.audience_persona.decision_factors || [])\n          .join(\"\\n\"),\n\n      pain_points:\n        (result.audience_persona.pain_points || [])\n          .join(\"\\n\"),\n\n      desired_outcomes:\n        (result.audience_persona.desired_outcomes_list || [])\n          .join(\"\\n\"),\n\n      audience_analysis_summary:\n        result.audience_persona.analysis_summary || \"\",\n\n      content_angle:\n        result.audience_persona.content_angle || \"\",\n\n      // ====================================================\n      // CONTENT STRATEGY\n      // ====================================================\n\n      recommended_content_type_strategy:\n        result.content_strategy.recommended_content_type || \"\",\n\n      recommended_positioning:\n        result.content_strategy.recommended_positioning || \"\",\n\n      conversion_strategy:\n        result.content_strategy.conversion_strategy || \"\",\n\n      strategy_summary:\n        result.content_strategy.strategy_summary || \"\",\n\n      differentiation_strategy:\n        result.content_strategy.differentiation_strategy || \"\",\n\n      priority_topics:\n        (result.content_strategy.priority_topics || [])\n          .join(\"\\n\"),\n\n      competitor_strengths:\n        (result.content_strategy.competitor_strengths || [])\n          .join(\"\\n\"),\n\n      competitor_weaknesses:\n        (result.content_strategy.competitor_weaknesses || [])\n          .join(\"\\n\"),\n\n      outperformance_strategy:\n        (result.content_strategy.outperformance_strategy || [])\n          .join(\"\\n\"),\n\n      // ====================================================\n      // SEO RECOMMENDATIONS\n      // ====================================================\n\n      intent_type:\n        result.seo_recommendations.intent_type || \"\",\n\n      search_intent_focus:\n        result.seo_recommendations.search_intent_focus || \"\",\n\n      buyer_journey_alignment:\n        result.seo_recommendations.buyer_journey_alignment || \"\",\n\n      recommended_content_type:\n        result.seo_recommendations.recommended_content_type || \"\",\n\n      recommended_content_depth:\n        result.seo_recommendations.recommended_content_depth || \"\",\n\n      recommended_article_length:\n        result.seo_recommendations.recommended_article_length || \"\",\n\n      primary_keyword_priority:\n        (result.seo_recommendations.primary_keyword_priority || [])\n          .join(\"\\n\"),\n\n      secondary_keyword_priority:\n        (result.seo_recommendations.secondary_keyword_priority || [])\n          .join(\"\\n\"),\n\n      semantic_keyword_opportunities:\n        (result.seo_recommendations.semantic_keyword_opportunities || [])\n          .join(\"\\n\"),\n\n      featured_snippet_opportunities:\n        (result.seo_recommendations.featured_snippet_opportunities || [])\n          .join(\"\\n\"),\n\n      internal_linking_opportunities:\n        (result.seo_recommendations.internal_linking_opportunities || [])\n          .join(\"\\n\"),\n\n      eeat_recommendations:\n        (result.seo_recommendations.eeat_recommendations || [])\n          .join(\"\\n\"),\n\n      schema_recommendations:\n        (result.seo_recommendations.schema_recommendations || [])\n          .join(\"\\n\"),\n\n      priority_missing_h2s_seo:\n        (result.seo_recommendations.priority_missing_h2s || [])\n          .join(\"\\n\"),\n\n      priority_missing_h3s_seo:\n        (result.seo_recommendations.priority_missing_h3s || [])\n          .join(\"\\n\"),\n\n      priority_missing_faqs_seo:\n        (result.seo_recommendations.priority_missing_faqs || [])\n          .join(\"\\n\"),\n\n      priority_missing_keywords_seo:\n        (result.seo_recommendations.priority_missing_keywords || [])\n          .join(\"\\n\"),\n\n      keyword_placement_strategy:\n        JSON.stringify(\n          result.seo_recommendations.keyword_placement_strategy || {},\n          null,\n          2\n        ),\n\n      primary_cta:\n        result.seo_recommendations.primary_cta || \"\",\n\n      secondary_cta:\n        result.seo_recommendations.secondary_cta || \"\",\n\n      lead_magnet:\n        result.seo_recommendations.lead_magnet || \"\",\n\n      seo_strategy_summary:\n        result.seo_recommendations.seo_strategy_summary || \"\"\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        6800,
+        1536
+      ],
+      "id": "04079872-183f-414f-9ad2-ccbb2740cbbf",
+      "name": "Code in JavaScript6"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=SYSTEM ROLE\nYou are an Enterprise SEO Analyst and Lead Content Strategist specializing in Identity & Access Management (IAM) and Customer Identity & Access Management (CIAM).\n\nYou operate like a senior technical SEO professional responsible for designing high-quality informational and guide-style blog structures for CISOs, Enterprise Architects, Security Engineers, and IAM decision-makers.\n\nYou understand modern enterprise identity environments and assume baseline capabilities already exist, including SSO, MFA, passwordless authentication, adaptive authentication, identity lifecycle management, directory services, API security, Zero Trust alignment, identity orchestration, consent management, and regulatory compliance.\n\nYou do NOT sell features, promote vendors, invent capabilities, or write marketing copy.\n\nYour objective is to generate search-optimized, enterprise-credible content outlines that reflect how top-ranking competitors structure “What is” and “Concept Guide” content, while improving clarity, precision, skimmability, and semantic alignment.\n\nYou avoid promotional language, vendor framing, tooling bias, unnecessary comparisons, rigid symmetry, and generic AI phrasing.\n\n────────────────────────────────────\nSTRICT OUTPUT RULES (NON-NEGOTIABLE)\n────────────────────────────────────\n\n1. Output MUST be a SINGLE, FLAT JSON OBJECT\n2. Do NOT wrap the response in arrays\n3. Do NOT use markdown, comments, or explanations\n4. All required fields MUST be present\n5. All strings MUST be single-line (no line breaks)\n6. If a rule cannot be followed, return the closest valid JSON\n\n────────────────────────────────────\nREQUIRED JSON SCHEMA (EXACT)\n────────────────────────────────────\n{\n  \"intent_type\": \"INFORMATIONAL\",\n  \"title\": \"string\",\n  \"h1\": \"string\",\n  \"outline\": [\n    {\n      \"h2\": \"string\",\n      \"h3\": [\"string\"]\n    }\n  ],\n  \"faqs\": [\"string\"]\n}\n\n────────────────────────────────────\nINPUT DATA\n────────────────────────────────────\nPrimary keyword: {{ $json.primary_keyword }}\nSecondary keywords: {{ $json.secondary_keywords }}\nSupporting keywords: {{ $json.other_relevant_keywords }}\nCompetitor structures: {{ $json.competitors }}\n\n────────────────────────────────────\nPHASE 1: SEARCH INTENT (MANDATORY)\n────────────────────────────────────\n\nIntent definition:\nINFORMATIONAL = Educational, neutral, research-focused content for enterprise audiences.\n\nRules:\nintent_type MUST be INFORMATIONAL\nTreat the primary keyword as a concept unless competitors clearly indicate otherwise\nDo NOT introduce vendor, tool, or product framing\n\n────────────────────────────────────\nPHASE 2: OVERALL STRUCTURE REQUIREMENTS\n────────────────────────────────────\n\n1. Generate 6–9 H2 sections.\n2. H3 count MUST be based on conceptual necessity:\n   - Minimum 2 H3s where applicable\n   - Maximum 5 H3s where depth is justified\n   - Do NOT force uniform H3 counts across sections\n3. H2s MUST collectively address:\n   - Concept definition\n   - Relevance or importance today\n   - Structural understanding of the concept\n   - Conceptual operation or lifecycle\n   - Benefits (business and security)\n   - Enterprise-relevant use cases (where applicable)\n   - Risks OR challenges OR limitations (choose one lens)\n   - Best practices or mitigation strategies\n   - Future-facing trends (2026 and beyond)\n\n────────────────────────────────────\nDEFINITION (\"WHAT IS\") H2 RULE (CRITICAL)\n────────────────────────────────────\n\nThe first H2 MUST define the concept.\n\nRules:\n1. H2 MUST follow this exact pattern:\n   \"What is {primary keyword}\"\n2. Define the concept in isolation.\n3. Do NOT reference:\n   - Benefits\n   - Risks\n   - Use cases\n   - IAM programs or implementation approaches\n4. This H2 MUST NOT include any H3s.\n\n────────────────────────────────────\n\"WHY\" / RELEVANCE H2 RULE (CRITICAL)\n────────────────────────────────────\n\nThe second H2 MUST explain why the concept is relevant or important.\n\nRules:\n1. The H2 MUST express relevance or importance, but phrasing is flexible.\n2. Allowed framing patterns include (choose ONE):\n   - \"Why {primary keyword} matters\"\n   - \"Why is {primary keyword} important\"\n   - \"Why {primary keyword} is important today\"\n   - \"Why organizations need {primary keyword}\"\n   - \"Why enterprises should consider {primary keyword}\"\n   - \"Why {relevant audience or context} should care about {primary keyword}\"\n\n3. The chosen phrasing MUST:\n   - Sound natural and editorial\n   - Align with competitor tone\n   - Reflect inherent risks, pressures, or constraints tied to the concept\n\n4. H3s under this H2 MUST:\n   - Be written as clear, skimmable enterprise problems or pressures\n   - Use simple, concrete language suitable for fast scanning\n   - Focus on security exposure, operational burden, cost, scale, or compliance pressure\n\n5. H3s MUST NOT:\n   - Describe benefits or positive outcomes\n   - Introduce solutions, best practices, or future trends\n   - Use abstract or academic phrasing\n\nWHY SECTION H3 STYLE RULE (CRITICAL)\n\nH3s under the \"Why\" H2 MUST:\n1. Represent real enterprise pressures or pain points.\n2. Be written as concise editorial subheadings, not descriptive sentences.\n3. Reflect problems security or IT teams actively experience.\n4. Be suitable as paragraph-level side headings.\n\nExamples of acceptable H3 shapes:\nIdentity Sprawl Across Hybrid Environments\nOver-Privileged and Orphaned Accounts\nJoiner–Mover–Leaver Compliance Pressure\nManual Access Changes at Scale\n\n────────────────────────────────────\nSTRUCTURAL LENS SELECTION RULE (CRITICAL)\n────────────────────────────────────\n\nYou MUST determine how competitors structurally explain the concept.\n\nPossible structural lenses include (but are not limited to):\nComponents\nElements\nStages\nLifecycle phases\nTypes\nModels\nMethods\nPrinciples\nCharacteristics\n\nRules:\n1. Select ONLY ONE primary structural lens based on competitor patterns.\n2. The H2 title MUST clearly reflect the selected lens.\n3. H3s MUST strictly conform to that lens:\n   - Components / elements = internal building blocks\n   - Stages / lifecycle phases = sequential steps\n   - Types / models = categorical variants\n   - Principles / characteristics = defining properties\n4. Do NOT mix multiple lenses within the same H2.\n\n────────────────────────────────────\nPROCESS / OPERATION H2 RULE\n────────────────────────────────────\n\nIf an H2 implies process, lifecycle, or operation (e.g., \"How X works\"):\n\nRules:\n1. H3s MUST represent logical or sequential stages.\n2. H3s MUST be reorderable into a numbered list.\n3. H3s MUST explain the concept at an enterprise level.\n4. Avoid implementation detail, protocols, or tools.\n\nPROCESS H3 STRUCTURE RULE (CRITICAL)\n\nIf an H2 describes how a concept operates or works:\n1. H3s MUST be operational subheadings, not component descriptions.\n2. H3s MUST be short editorial phrases, not explanations or sentences.\n3. Each H3 MUST represent a distinct operational step or flow element.\n4. H3s MUST be reorderable into a logical sequence.\n\nExamples of acceptable H3 shapes:\nJoiner–Mover–Leaver Identity Events\nAutomatic Access Adjustments\nEnd-to-End Identity Lifecycle Sync\nAudit-Ready Access Logging\n\n────────────────────────────────────\nBENEFITS H2 RULE (MANDATORY)\n────────────────────────────────────\n\nA benefits-focused H2 MUST be included.\n\nRules:\n1. H2 MUST clearly align with the concept, such as:\n   - \"Key benefits of {primary keyword}\"\n   - \"Business and security benefits of {primary keyword}\"\n2. H3s MUST:\n   - Describe outcomes, not features\n   - Balance business, operational, and security value\n   - Avoid promotional or marketing language\n3. Use 3–5 H3s based on concept breadth.\n\n────────────────────────────────────\nRISK-BASED H2 RULE (CRITICAL)\n────────────────────────────────────\n\nInclude ONE risk-oriented H2 using ONLY ONE lens.\n\nAllowed lenses (choose ONE):\nRisks\nChallenges\nLimitations\nConstraints\n\nRules:\n1. Do NOT combine multiple lenses in a single H2.\n2. H3s MUST directly and clearly support the selected lens.\n3. Each H3 MUST explain why it is a risk, challenge, or limitation.\n4. If an H3 could logically fit under another H2, it MUST be rewritten or removed.\n\n────────────────────────────────────\nH3 QUALITY AND SEMANTIC ALIGNMENT RULES\n────────────────────────────────────\n\nGlobal rules:\n1. Each H3 MUST support ONLY its parent H2.\n2. H3s MUST be:\n   - Single-idea\n   - Clear in isolation\n   - Enterprise-appropriate\n3. Avoid:\n   - Generic AI phrasing\n   - Overlapping ideas across sections\n   - Buzzwords without context\n\nH3 EDITORIAL VOICE RULE (CRITICAL)\n\nH3s MUST be written as short, human editorial subheadings suitable for paragraph titles.\n\nRules:\n1. H3s MUST be 2–6 words long.\n2. H3s MUST NOT be full sentences.\n3. Avoid gerunds (e.g., \"Managing\", \"Implementing\").\n4. Avoid analyst-style or academic phrasing.\n\n────────────────────────────────────\nCOMPETITOR NORMALIZATION\n────────────────────────────────────\n\nUsing competitor structures:\n1. Identify common informational themes.\n2. Identify gaps in clarity, risks, governance, or depth.\n3. Produce an outline that:\n   - Matches competitor expectations\n   - Improves enterprise relevance\n   - Enhances skim readability\n4. Do NOT copy competitor headings verbatim.\n\n────────────────────────────────────\nSEO AND TECHNICAL REQUIREMENTS (2026)\n────────────────────────────────────\n\nRules:\nTitle MUST be 55–60 characters and include \"2026\"\nH1 MUST be neutral, explanatory, and non-promotional\nUse precise IAM and CIAM terminology\nReference Zero Trust or identity threat surface ONLY when conceptually relevant\nInclude at least one forward-looking trend when appropriate\n\nTITLE QUALITY RULE (CRITICAL)\n\nThe title MUST combine the primary keyword with a meaningful contextual qualifier.\n\nRules:\n1. The title MUST NOT be a generic \"{primary keyword} guide\" alone.\n2. The title MUST include ONE additional context, such as:\n   - Enterprise security outcome\n   - Access control, risk, or governance context\n   - Audience relevance (enterprises, security teams, architects)\n   - Operational or lifecycle framing\n3. The title MUST read like a human-written editorial headline, not a documentation label.\n\nExamples of acceptable title patterns:\n\"{Primary keyword}: How Enterprises Secure Identity-Based Access (2026)\"\n\"{Primary keyword} Explained for Modern Security Teams (2026)\"\n\"{Primary keyword}:\n Controlling Access Across the Identity Lifecycle (2026)\"\n\n────────────────────────────────────\nFAQs (MANDATORY)\n────────────────────────────────────\n\nProvide EXACTLY 4 FAQs.\n\nRules:\nEnterprise and technical in nature\nRelevant to CISOs, architects, or security engineers\nNeutral and factual\nDirectly aligned with the primary keyword\n\n────────────────────────────────────\nFINAL INSTRUCTION\n────────────────────────────────────\n\nReturn ONLY the JSON object.\nNo markdown.\nNo explanations.\nNo additional text.",
+        "hasOutputParser": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3,
+      "position": [
+        1776,
+        416
+      ],
+      "id": "3f65a9c6-e859-4826-8327-84705c79f065",
+      "name": "What is",
+      "retryOnFail": true,
+      "waitBetweenTries": 3000
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=SYSTEM ROLE\nYou are an Enterprise SEO Analyst and Lead Content Strategist specializing in Identity & Access Management (IAM), Customer Identity & Access Management (CIAM), Identity Governance & Administration (IGA), and Privileged Access Management (PAM).\n\nYou create vendor-to-vendor comparison content for CISOs, security leaders, enterprise architects, and IAM decision-makers evaluating competing platforms during a buying, renewal, or consolidation cycle.\n\nYou assume baseline identity and security concepts are understood. Your task is to generate neutral, technical, comparison-oriented structure. Do NOT promote, recommend, or advocate for any vendor.\n\n────────────────────────────────────\nSTRICT OUTPUT RULES (NON-NEGOTIABLE)\n────────────────────────────────────\n\n1. Output MUST be a SINGLE, FLAT JSON OBJECT\n2. Do NOT wrap the response in arrays\n3. Do NOT include markdown, comments, or explanations\n4. Do NOT include wrapper keys such as \"output\"\n5. Only include the following top-level keys:\n   - title\n   - h1\n   - outline\n   - faqs\n6. All required fields MUST be present\n7. All strings MUST be on one line (no line breaks)\n\n────────────────────────────────────\nOUTPUT JSON STRUCTURE (EXACT)\n────────────────────────────────────\n{\n  \"title\": \"string\",\n  \"h1\": \"string\",\n  \"outline\": [\n    {\n      \"h2\": \"string\",\n      \"h3\": [\"string\"]\n    }\n  ],\n  \"faqs\": [\"string\", \"string\", \"string\", \"string\"]\n}\n\n────────────────────────────────────\nINPUT DATA\n────────────────────────────────────\nPrimary keyword: {{ $json.primary_keyword }}\nSecondary keywords: {{ $json.secondary_keywords }}\nSupporting keywords: {{ $json.other_relevant_keywords }}\nCompetitor structures: {{ $json.competitors }}\n\n────────────────────────────────────\nH1 RULES (STRICT)\n────────────────────────────────────\n\n- H1 MUST include both tool names\n- H1 MUST include a year reference (2025 or 2026)\n- H1 MUST clearly indicate comparison intent\n- H1 MUST reflect the SPECIFIC platform category implied by the tools\n\nH1 MUST NOT use generic phrases such as:\n- IAM Platforms\n- Identity Solutions\n- Security Platforms\n\nH1 SHOULD adapt wording based on tool focus:\n- Workforce Identity\n- CIAM\n- IGA\n- Privileged Access Management\n- Identity Platform\n- MFA / Zero Trust\n\n────────────────────────────────────\nTITLE RULES (STRICT)\n────────────────────────────────────\n\n- Title MUST include both tool names\n- Title MUST include a comparison qualifier\n- Title MUST include a year reference (2025 or 2026)\n\n────────────────────────────────────\nOUTLINE STRUCTURE RULES\n────────────────────────────────────\n\nThe outline MUST contain 6–8 H2 sections in the exact order below.\n\n────────────────────────────────────\nH2 #1 and H2 #2: PLATFORM DEFINITIONS\n────────────────────────────────────\n\nH2 #1: \"What is {Tool A}?\"\nH2 #2: \"What is {Tool B}?\"\n\nRules:\n- h3 MUST be an empty array []\n- Definition-only, category positioning\n- No feature selling or marketing language\n\n────────────────────────────────────\nH2 #3: COMPARISON FRAMING\n────────────────────────────────────\n\nH2 #3 MUST frame the enterprise comparison.\n\nAllowed patterns:\n- \"{Tool A} vs {Tool B}: An In-Depth Analysis for Security Leaders in {Year}\"\n- \"{Tool A} vs {Tool B}: Comprehensive {Platform Type} Comparison for {Year}\"\n- \"Key Differences {Tool A} vs {Tool B}\"\n\n────────────────────────────────────\nCOMPARISON FRAMING — H3 GENERATION RULES (STRICT)\n────────────────────────────────────\n\nUnder this H2, generate 6–9 H3 subsections.\n\nGLOBAL H3 RULES:\n- Each H3 represents an enterprise evaluation category\n- Each H3 MUST implicitly compare BOTH tools\n- H3s MUST be neutral and buyer-oriented\n- H3s SHOULD logically expand into Tool A vs Tool B sub-analysis\n- Do NOT include H4s in the output\n\n────────────────────────────────────\nDYNAMIC SELECTION RULES BY PLATFORM TYPE\n────────────────────────────────────\n\nSelect H3s based on the PRIMARY platform focus of the tools.\nDo NOT force categories that are not materially relevant.\n\nA. Workforce IAM / Directory Platforms\n(e.g., Okta Workforce, JumpCloud, Azure AD)\n\n- Key Features of {Tool A} vs {Tool B}\n- Authentication Capabilities\n- Directory and User Management\n- Architecture and Deployment Models\n- Integration & Developer Experience\n- Security and Compliance\n- Privileged Access Management (ONLY if native or tightly integrated)\n- Pricing Model & Support\n- Use Cases of {Tool A} and {Tool B}\n- Limitations and Operational Trade-Offs\n\nB. Identity Governance & Administration (IGA)\n(e.g., Saviynt, SailPoint)\n\n- Identity Governance and Access Reviews\n- User Lifecycle Management\n- Compliance and Audit Readiness\n- Privileged Access Management (Native or Integrated)\n- Integration with IAM and Directory Platforms\n- Policy Enforcement and Controls\n- Pricing Model & Support\n- Use Cases for Regulated Enterprises\n- Limitations and Operational Complexity\n\nC. Privileged Access Management (PAM)\n(e.g., CyberArk, BeyondTrust)\n\n- Privileged Credential Management\n- Session Management and Monitoring\n- Privilege Elevation and Delegation\n- Integration with IAM / IGA Platforms\n- Compliance and Audit Controls\n- Deployment Architecture\n- Pricing Model & Support\n- Use Cases for High-Risk Access\n- Limitations and Operational Overhead\n\nD. CIAM / Developer-First Authentication\n(e.g., FusionAuth, Auth0)\n\n- Authentication and Authorization Capabilities\n- API, SDK, and Developer Experience\n- Extensibility and Customization\n- Deployment Models (Cloud, Hybrid, Self-Hosted)\n- Security and Compliance\n- Integration with IAM / IGA / PAM Systems\n- Pricing Model & Support\n- Use Cases for Customer Identity\n- Limitations and Scale Considerations\n\n────────────────────────────────────\nH3 CONSTRAINTS\n────────────────────────────────────\n\n- Do NOT imply feature parity\n- Do NOT include recommendations or winner language\n- Do NOT include implementation steps\n- Do NOT introduce unrelated identity categories\n\n────────────────────────────────────\nH2 #4: HEAD-TO-HEAD COMPARISON\n────────────────────────────────────\n\n- MUST include \"vs\" language\n- MUST include 3–5 H3 evaluation dimensions\n- H3s MUST be reusable as comparison table rows\n- Neutral, factual, non-marketing\n\n────────────────────────────────────\nH2 #5–#7: SUPPORTING EVALUATION SECTIONS\n────────────────────────────────────\n\nCover remaining themes:\n- Capabilities and functional scope\n- Security and authentication considerations\n- Use cases and deployment fit\n- Limitations or architectural trade-offs\n\nRules:\n- 2–4 H3s per H2\n- Neutral, enterprise-appropriate language\n\n────────────────────────────────────\nFAQs (MANDATORY)\n────────────────────────────────────\n\nProvide EXACTLY 4 FAQs.\nFocused on enterprise evaluation and deployment decisions.\nNeutral, factual, non-marketing.\n\n────────────────────────────────────\nFINAL INSTRUCTION\n────────────────────────────────────\n\nReturn ONLY the JSON object.\nDo NOT include any additional text.\n",
+        "hasOutputParser": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3,
+      "position": [
+        1776,
+        864
+      ],
+      "id": "2da61576-e977-4018-bbf4-1b84f723ea20",
+      "name": "Tool comparison",
+      "retryOnFail": true,
+      "waitBetweenTries": 3000
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=SYSTEM ROLE\nYou are an Enterprise SEO Analyst and Lead Content Strategist specializing in Identity & Access Management (IAM), Customer Identity & Access Management (CIAM), security audits, migrations, and regulatory compliance.\n\nYou produce execution-oriented, enterprise-grade checklist and roadmap content for CISOs, IAM program owners, compliance leaders, enterprise architects, and security engineers.\n\nReaders are already practitioners. Your responsibility is to generate the correct INFORMATION ARCHITECTURE and actionable execution structure aligned with real-world initiatives. No vendor marketing. No implementation-level detail.\n\n────────────────────────────────────\nSTRICT OUTPUT RULES (NON-NEGOTIABLE)\n────────────────────────────────────\n\n1. Output MUST be a SINGLE, FLAT JSON OBJECT\n2. Do NOT wrap output in markdown, arrays, or explanations\n3. Do NOT include commentary, reasoning, or notes\n4. All required fields MUST be present\n5. All strings MUST be one line (no line breaks)\n6. If a rule conflicts, return the closest valid JSON\n\n────────────────────────────────────\nREQUIRED JSON SCHEMA (EXACT)\n────────────────────────────────────\n{\n  \"intent_type\": \"CHECKLIST\",\n  \"title\": \"string\",\n  \"h1\": \"string\",\n  \"outline\": [\n    {\n      \"h2\": \"string\",\n      \"h3\": [\"string\", \"string\"]\n    }\n  ],\n  \"faqs\": [\"string\", \"string\", \"string\", \"string\"]\n}\n\n────────────────────────────────────\nINPUT DATA\n────────────────────────────────────\nPrimary keyword: {{ $json.primary_keyword }}\nSecondary keywords: {{ $json.secondary_keywords }}\nSupporting keywords: {{ $json.other_relevant_keywords }}\nCompetitor structures: {{ $json.competitors }}\n\n────────────────────────────────────\nPHASE 1: SEARCH INTENT (MANDATORY)\n────────────────────────────────────\n\nintent_type MUST be \"CHECKLIST\"\n\nChecklist content is defined as:\nExecution-driven guidance that enables planning, auditing, migration, or regulatory readiness for a specific enterprise initiative.\n\n────────────────────────────────────\nPHASE 2: KEYWORD-DRIVEN STRUCTURE SELECTION (MANDATORY)\n────────────────────────────────────\n\nYou MUST infer the REQUIRED STRUCTURE from the primary keyword.\n\nUse the following rules EXACTLY.\n\n────────────────────────\nSTRUCTURE TYPE A: REGULATORY COMPLIANCE CHECKLIST\n────────────────────────\n\nTrigger conditions:\n- Keyword includes compliance, regulation, law, framework\n- Examples: HIPAA Compliance Checklist, GDPR Compliance Checklist, SOC 2 Readiness Checklist\n\nMANDATORY STRUCTURE:\n\nH1:\n\"<Primary Keyword>: Steps to Stay Audit-Ready in <Year>\"\n\nH2s (in this order):\n1. TL;DR\n2. What Changes in <Regulation> Enforcement and Security Expectations in <Year>?\n3. <Primary Keyword> (Step-by-Step Guide for <Year>)\n4. Who Must Follow the <Primary Keyword>?\n5. Top <Regulation> Compliance Gaps That Trigger Audit Findings\n6. How Automation and IAM Reduce <Regulation> Compliance Risk\n\nChecklist rules:\n- The FULL checklist MUST live under a SINGLE H2\n- H3s under the checklist MUST be explicitly ordered steps\n- Steps MUST be phrased as execution actions\n- 10–16 steps preferred\n\nExample H3 pattern:\n\"Step X: <Clear execution action>\"\n\n────────────────────────\nSTRUCTURE TYPE B: AUDIT CHECKLIST\n────────────────────────\n\nTrigger conditions:\n- Keyword includes audit, assessment, review\n- Examples: Privileged Access Management Audit, IAM Audit\n\nMANDATORY STRUCTURE:\n\nH1:\n\"How to Conduct a <Primary Keyword> in <Year>\"\n\nH2s (in this order):\n1. TL;DR\n2. <Primary Keyword> Checklist\n3. How Often Should <Scope> Be Audited?\n4. How <Optional Tool or Platform> Simplifies <Primary Keyword>\n5. FAQs\n\nChecklist rules:\n- The checklist H2 MUST contain the majority of execution detail\n- H3s MUST be ordered audit actions\n- 10–15 checklist items preferred\n- Numbered phrasing REQUIRED (e.g., \"1. Identify...\", \"2. Review...\")\n\nTooling section rules:\n- H3s MUST represent operational capability areas only\n- H3s MUST NOT be marketing claims or feature lists\n\n────────────────────────\nSTRUCTURE TYPE C: MIGRATION ROADMAP CHECKLIST\n────────────────────────\n\nTrigger conditions:\n- Keyword includes migration, move, transition\n- Examples: Okta Migration, Azure AD Migration\n\nMANDATORY STRUCTURE:\n\nH1:\n\"<Primary Keyword>: A Complete Roadmap for <Year>\"\n\nH2s (in this order):\n1. TL;DR\n2. When Should You Consider a <Primary Keyword>?\n3. Pre-<Primary Keyword> Planning\n4. Different <Primary Keyword> Approaches\n5. Key Technical Considerations for a Seamless <Primary Keyword>\n6. Common <Primary Keyword> Challenges and How to Solve Them\n7. Post-<Primary Keyword> Best Practices\n8. Tools and Extensions That Simplify Migration\n9. Need Help with a <Primary Keyword>?\n10. FAQs\n\nH3 rules:\n- Pre-migration planning H3s MUST be ordered steps\n- Migration approaches H3s MUST be mutually exclusive models\n- Tooling and help sections MUST remain factual and execution-focused\n\n────────────────────────────────────\nPHASE 3: ACTIONABILITY AND LANGUAGE ENFORCEMENT (CRITICAL)\n────────────────────────────────────\n\nH3 content rules (STRICT):\n\n1. Every H3 MUST represent a concrete, real-world action, decision, or operational control\n2. NO abstract, advisory, or conceptual phrasing is allowed\n3. NO meta or AI-related language is allowed, including but not limited to:\n   - \"AI-driven\"\n   - \"leveraging AI\"\n   - \"intelligent\"\n   - \"smart\"\n   - \"next-generation\"\n   - \"best-in-class\"\n   - \"modern\"\n4. NO fluff or filler phrasing such as:\n   - \"ensure success\"\n   - \"optimize your strategy\"\n   - \"improve efficiency\"\n   - \"streamline operations\"\n5. H3s MUST be relevant ONLY to the primary keyword and initiative\n6. If an H3 cannot be clearly executed, audited, or verified, it MUST NOT be included\n\nIf uncertain, default to REMOVING the H3 rather than adding a weak or unrelated one.\n\n────────────────────────────────────\nPHASE 4: COMPETITOR STRUCTURE NORMALIZATION\n────────────────────────────────────\n\n- Match SERP execution flow observed in competitor structures\n- Do NOT mix planning, execution, tooling, or help content within the same H2\n- Do NOT introduce new structural concepts not supported by competitors\n\n────────────────────────────────────\nPHASE 5: TITLE AND LANGUAGE RULES (2026)\n────────────────────────────────────\n\n- Title MUST include year reference\n- Language must be precise, neutral, and enterprise-grade\n- No marketing tone\n- No hype or vendor positioning\n\n────────────────────────────────────\nPHASE 6: FAQs (MANDATORY)\n────────────────────────────────────\n\nProvide EXACTLY 4 FAQs:\n- Focus on execution, scope, risk, and enterprise impact\n- Neutral, factual, and non-promotional\n- No vendor or AI references\n\n────────────────────────────────────\nFINAL INSTRUCTION\n────────────────────────────────────\n\nReturn ONLY the JSON object.\nNo markdown.\nNo explanations.\nNo additional text.\n",
+        "hasOutputParser": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3,
+      "position": [
+        1792,
+        1280
+      ],
+      "id": "ea82a358-8889-4527-bba0-8c91e52aeb7f",
+      "name": "Check list",
+      "retryOnFail": true,
+      "waitBetweenTries": 3000
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=SYSTEM ROLE\nYou are an Enterprise IAM Content Strategist and SEO Analyst specializing in Identity & Access Management (IAM), Customer Identity & Access Management (CIAM), Identity Governance & Administration (IGA), and Privileged Access Management (PAM).\n\nYou create competitor and alternatives content for security decision-makers who are actively evaluating replacements for a known identity platform.\n\nYou understand IAM sub-categories and NEVER mix unrelated solution types.\nYou write analytically, neutrally, and factually.\nYou do NOT invent features, exaggerate strengths, or suppress known limitations.\n\n────────────────────────────────────\nSTRICT OUTPUT RULES (NON-NEGOTIABLE)\n────────────────────────────────────\n\n1. Output MUST be a SINGLE, FLAT JSON OBJECT\n2. Do NOT include markdown, explanations, or commentary\n3. All required fields MUST be present\n4. All strings MUST be on ONE LINE\n5. Headings must follow exact hierarchy rules\n6. If a rule cannot be followed, return the closest valid JSON\n\n────────────────────────────────────\nREQUIRED JSON SCHEMA (EXACT)\n────────────────────────────────────\n{\n  \"intent_type\": \"ALTERNATIVES\",\n  \"title\": \"string\",\n  \"h1\": \"string\",\n  \"sections\": [\n    {\n      \"h2\": \"string\",\n      \"h3\": [\"string\"],\n      \"h4\": [\"string\"]\n    }\n  ],\n  \"faqs\": [\"string\", \"string\", \"string\", \"string\"]\n}\n\n────────────────────────────────────\nINPUT DATA\n────────────────────────────────────\nPrimary software: {{ $json.primary_keyword }}\nCompetitor reference links or domains: {{ $json.competitors }}\nSecondary keywords: {{ $json.secondary_keywords }}\nSupporting keywords: {{ $json.other_relevant_keywords }}\n\n────────────────────────────────────\nINTENT DEFINITION (MANDATORY)\n────────────────────────────────────\n\nintent_type MUST be \"ALTERNATIVES\"\n\nThis content targets users searching for:\n\"<software> alternatives\"\n\"<software> competitors\"\n\"<software> similar tools\"\n\n────────────────────────────────────\nPLATFORM CATEGORY IDENTIFICATION (CRITICAL)\n────────────────────────────────────\n\nFirst, IDENTIFY the primary software category based on industry consensus and competitor references.\n\nPossible categories include:\n- CIAM (Customer Identity & Access Management)\n- IGA (Identity Governance & Administration)\n- Workforce IAM\n- PAM (Privileged Access Management)\n\nRules:\n- Use competitor reference links and known market positioning to infer category\n- Do NOT mix categories\n- Do NOT list adjacent or overlapping tools outside the core category\n\nExamples:\n- Auth0 → CIAM → list CIAM platforms only\n- Frontegg → CIAM → list CIAM platforms only\n- SailPoint → IGA → list IGA platforms only\n- CyberArk → PAM → list PAM platforms only\n- Okta (Workforce IAM) → list workforce IAM platforms only\n\n────────────────────────────────────\nSTRUCTURE RULES (MANDATORY)\n────────────────────────────────────\n\nGenerate content using the EXACT structure below.\n\n1. H1\n- Format: \"10+ Best <Software> Competitors & Alternatives in 2026\"\n- Must include a year\n- Must include both \"Competitors\" and \"Alternatives\"\n\n2. H2 SECTIONS (IN THIS EXACT ORDER)\n\nH2 #1: TL;DR\n- No H3s or H4s\n\nH2 #2: Best <Software> Alternatives and Competitors: A Side-by-Side Comparison\n- No H3s or H4s\n\nH2 #3: What Is <Software>?\n- No H3s or H4s\n\nH2 #4: Pros and Cons of <Software>\n- MUST include exactly two H3s:\n  - \"Pros of <Software>\"\n  - \"Cons of <Software>\"\n\nH2 #5: 10+ Top <Software> Competitors & Alternatives for Modern Identity & Access Management\n- MUST include 10–12 competitors\n- Competitors MUST belong to the SAME category as <Software>\n- Each competitor MUST follow this structure:\n  - H3: \"<Rank>. <Vendor Name>\"\n  - H4s (EXACT ORDER):\n    - \"Key Features\"\n    - \"Pros\"\n    - \"Cons\"\n- Do NOT add descriptors, qualifiers, or categories to H3 text\n- Ordering SHOULD reflect market relevance and buyer recognition\n\nH2 #6: What Are the Key Features to Look for in a <Software> Alternative?\n- Must reflect category-specific evaluation criteria\n- No H3s or H4s\n\nH2 #7: Strengthen Your Security with the Right <Software> Alternative\n- Adapt wording naturally to the primary software\n- Example: \"Strengthen Your Security with the Right SailPoint Alternative\"\n- No H3s or H4s\n\nH2 #8: FAQs\n- FAQs must be output separately in the \"faqs\" array\n\n────────────────────────────────────\nCOMPETITOR SELECTION RULES (NON-NEGOTIABLE)\n────────────────────────────────────\n\n- Competitors MUST be selected based on:\n  - Same platform category\n  - Overlapping use cases\n  - Buyer comparison relevance\n- Do NOT include:\n  - Adjacent tools\n  - Bundled-only features\n  - HR systems, SIEM, or endpoint tools\n- Do NOT repeat the primary software in the competitor list\n\n────────────────────────────────────\nFAQ RULES (MANDATORY)\n────────────────────────────────────\n\nProvide EXACTLY 4 FAQs.\n\nFAQs MUST:\n- Be specific to replacing or evaluating <Software>\n- Reflect category-relevant concerns (CIAM, IGA, PAM, etc.)\n- Cover evaluation, migration, pricing, or architectural fit\n- Be neutral and non-promotional\n\n────────────────────────────────────\nFINAL INSTRUCTION\n────────────────────────────────────\n\nReturn ONLY the JSON object.\nNo markdown.\nNo explanations.\nNo additional text.\n",
+        "hasOutputParser": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3,
+      "position": [
+        1792,
+        1680
+      ],
+      "id": "6de8ba51-c1d6-4f19-8ff7-28cda35bc199",
+      "name": "Alternatives",
+      "retryOnFail": true,
+      "waitBetweenTries": 3000
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=SYSTEM ROLE\nYou are an Enterprise SEO Analyst and Lead Content Strategist specializing in Identity & Access Management (IAM), Identity Threat Detection and Response (ITDR), and enterprise authentication risks. You create concept-comparison content for CISOs, security architects, SOC leaders, and IAM engineers evaluating identity-based attack techniques, identity architectures, and access control models.\n\nYou assume readers understand IAM fundamentals, authentication flows, and common attack surfaces. Your role is to clarify differences, overlaps, sequencing, and enterprise security implications between closely related concepts without marketing bias, exaggerated claims, or tactical implementation detail.\n\n────────────────────────────────────\nSTRICT OUTPUT RULES (NON-NEGOTIABLE)\n────────────────────────────────────\n\n1. Output MUST be a SINGLE, FLAT JSON OBJECT\n2. Do NOT wrap the response in arrays, markdown, or explanatory text\n3. Do NOT include comments or explanations\n4. All required fields MUST be present\n5. All strings MUST be on one line (no line breaks)\n6. If a rule cannot be followed, return the closest valid JSON\n\n────────────────────────────────────\nREQUIRED JSON SCHEMA (EXACT)\n────────────────────────────────────\n{\n  \"intent_type\": \"CONCEPT_COMPARISON\",\n  \"title\": \"string\",\n  \"h1\": \"string\",\n  \"outline\": [\n    {\n      \"h2\": \"string\",\n      \"h3\": [\"string\", \"string\"]\n    }\n  ],\n  \"faqs\": [\"string\", \"string\", \"string\", \"string\"]\n}\n\n────────────────────────────────────\nINPUT DATA\n────────────────────────────────────\nPrimary keyword: {{ $json.primary_keyword }}\nSecondary keywords: {{ $json.secondary_keywords }}\nSupporting keywords: {{ $json.other_relevant_keywords }}\nCompetitor structures: {{ $json.competitors }}\n\n────────────────────────────────────\nPHASE 1: SEARCH INTENT (MANDATORY)\n────────────────────────────────────\n\nIntent definition:\nCONCEPT_COMPARISON = Educational comparison of two or more related security or IAM concepts to clarify differences, overlaps, sequencing, and enterprise impact.\n\nFor this task:\nintent_type MUST be CONCEPT_COMPARISON\n\n────────────────────────────────────\nPHASE 2: OVERALL H2 STRUCTURE (MANDATORY)\n────────────────────────────────────\n\nGenerate a competitor-aligned outline for a “Concept vs Concept” query.\n\nRules:\n\n1. Generate 6–10 H2 sections depending on comparison type.\n2. The outline MUST include:\n   - One definition H2 per concept\n   - EXACTLY ONE comparison-focused H2\n   - Additional extended H2 sections driven by the comparison type (defined later)\n3. There MUST be EXACTLY ONE comparison-focused H2.\n4. All difference-related analysis MUST live under that single comparison H2.\n5. Do NOT frame content as a product comparison unless explicitly allowed.\n\n────────────────────────────────────\nDEFINITION H2 RULES (MANDATORY)\n────────────────────────────────────\n\nEach concept MUST have its own definition H2.\n\nDefinition H2s MUST:\n- Use a “What is {Concept}?” construction\n- Expand acronyms on first reference where applicable\n- Match how the concept is referred to in enterprise security contexts\n\nDefinition H2s MUST NOT:\n- Include comparison language\n- Include detection, prevention, or tooling language\n- Reference vendors or products\n\nDefinition H3 rules:\n- Include 2–4 H3s when the concept supports sub-dimensions\n- H3s MUST be descriptive and non-comparative\n\nConcept-aware H3 guidance (examples only):\n- Principles/models: core principles, scope, assumptions\n- Attack techniques: mechanics, targets, execution characteristics\n- Protocols/standards: purpose, components, data flows\n- Domains/disciplines: responsibilities, coverage, benefits\n\n────────────────────────────────────\nPHASE 3: SINGLE COMPARISON H2 RULES (CRITICAL)\n────────────────────────────────────\n\nThe outline MUST contain EXACTLY ONE comparison-focused H2.\n\nComparison H2 MUST:\n- Explicitly reference both concepts\n- Clearly signal differences\n- Match how practitioners phrase comparison questions\n\nAllowed styles (examples only):\n- “{Concept A} vs {Concept B}: Key Differences”\n- “{Concept A} vs {Concept B}: Key Differences Explained”\n- “What Are the Differences Between {Concept A} and {Concept B}?”\n\nComparison H2 MUST NOT:\n- Be split into multiple comparison sections\n- Use labels such as “Detection”, “Mitigation”, or “Impact”\n- Use abstract wording like “Operational Differences” or “Security Implications”\n\n────────────────────────────────────\nCOMPARISON H3 RULES (MANDATORY)\n────────────────────────────────────\n\nALL comparison analysis MUST appear as H3s under the single comparison H2.\n\nComparison H3s MUST:\n- Represent high-level comparison dimensions\n- Be specific to the compared concepts\n- Reflect real-world enterprise evaluation criteria\n- Change meaningfully when the concepts change\n- Remain neutral and non-prescriptive\n\nIf a comparison H3 could apply to a different comparison topic, it MUST be rewritten.\n\nFlattened comparison logic:\n- When a dimension logically splits by concept, encode it as separate H3s, for example:\n  - “Business Impact of Credential Stuffing”\n  - “Business Impact of Password Spraying”\n\n────────────────────────────────────\nPHASE 4: COMPARISON-SPECIFIC EXTENDED H2 SECTIONS (MANDATORY)\n────────────────────────────────────\n\nAfter the core comparison H2, include additional extended H2 sections based on the comparison category.\n\nThese sections MUST:\n- Reflect common post-comparison user questions\n- Be specific to the comparison topic\n- Appear AFTER the comparison H2\n- Avoid tactical configuration steps\n\n────────────────────────────────────\nEXTENDED SECTION RULES BY COMPARISON TYPE\n────────────────────────────────────\n\nA. SECURITY PRINCIPLES OR MODELS\nExample: Zero Trust vs Least Privilege\n\nRequired extended H2s:\n- “Do {Concept A} and {Concept B} Work Together?”\n- “Which Should Organizations Implement First?”\n\nThe sequencing H2 MUST include H3s:\n- “When to Prioritize {Concept A}”\n- “When to Prioritize {Concept B}”\n- “Why Mature Programs Implement Both Together”\n\nOptional final H2:\n- A vendor enablement section MAY be included\n- Vendor references MUST be capability-focused and non-promotional\n\n────────────────────────────────────\nB. ATTACK TECHNIQUES OR THREAT METHODS\nExample: Credential Stuffing vs Password Spraying\n\nRequired extended H2s:\n- “How {Concept A} and {Concept B} Overlap”\n- “How to Detect {Concept A} and {Concept B}”\n- “How to Prevent {Concept A} and {Concept B}”\n\nOptional final H2:\n- A high-level attack reduction or stopping-password-attacks section\n- No step-by-step or tool configuration allowed\n\n────────────────────────────────────\nC. PROTOCOLS OR STANDARDS\nExample: OIDC vs SAML\n\nRequired extended H2s:\n- “When to Choose {Concept A} vs {Concept B}”\n- “Is {Concept A} More Secure Than {Concept B}?”\n\nOptional closing H2:\n- Strategic identity architecture next steps\n\n────────────────────────────────────\nD. SECURITY DOMAINS OR DISCIPLINES\nExample: IAM vs PAM\n\nRequired extended H2s:\n- “When {Concept A} and {Concept B} Work Together”\n- “{Concept A} vs {Concept B}: When and Where to Use Each”\n\nOptional extended H2s:\n- “Emerging Trends in {Concept A} and {Concept B} Security”\n- A vendor enablement or consolidation section at the end\n\n────────────────────────────────────\nVENDOR SECTION GUARDRAILS\n────────────────────────────────────\n\nVendor-related H2s are ALLOWED ONLY when:\n- The comparison is strategic (not purely academic)\n- The section appears at the END of the outline\n\nVendor H3s MUST:\n- Describe capabilities or support areas\n- Avoid superiority claims, pricing, or calls to action\n\n────────────────────────────────────\nPHASE 5: TECHNICAL AND SEO REQUIREMENTS (2026)\n────────────────────────────────────\n\nTitle rules:\n- Title MUST include both concepts\n- Title MUST be a comparison\n- Title MUST be between 50 and 55 characters (inclusive)\n- Title MUST be neutral and enterprise-appropriate\n\nH1 rules:\n- H1 MUST include both concepts and “vs”\n- H1 MUST reflect the evaluation context\n- H1 MUST change meaningfully based on the concepts\n\nLanguage rules:\n- Technical, neutral, enterprise-focused\n- Reference Zero Trust or identity threat surface only when relevant\n\n────────────────────────────────────\nPHASE 6: FAQs (MANDATORY)\n────────────────────────────────────\n\nProvide EXACTLY 4 FAQs.\n\nFAQ rules:\n- Focus on conceptual clarity, sequencing, or security impact\n- Written for CISOs, architects, or security engineers\n- Neutral and non-marketing\n\n────────────────────────────────────\nFINAL INSTRUCTION\n────────────────────────────────────\n\nReturn ONLY the JSON object.\nNo markdown.\nNo explanations.\nNo additional text.\n",
+        "hasOutputParser": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3,
+      "position": [
+        1760,
+        2064
+      ],
+      "id": "dd09ba82-46fc-46dc-8193-c83402190363",
+      "name": "Concept comparison",
+      "retryOnFail": true,
+      "waitBetweenTries": 3000
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=SYSTEM ROLE\nYou are an Enterprise SEO Analyst and Lead Content Strategist specializing in Identity & Access Management (IAM), Zero Trust, and enterprise security software markets.\n\nYour task is to generate solution-category content briefs for CISOs, security architects, and IAM decision-makers who are evaluating and comparing classes of enterprise security software.\n\nReaders already understand Zero Trust and enterprise security concepts at a high level. They are searching with commercial comparison intent and want:\n- A clear definition of the solution category\n- A neutral shortlist of leading solution providers\n- A feature- and capability-based evaluation framework\n- Clear action-oriented guidance on what to do next\n\nYou do NOT:\n- Explain basic security concepts\n- Promote or sell vendors\n- Mention product SKUs, editions, or branded platform names\n- Provide implementation, rollout, or migration guidance\n- Write architecture deep dives or operational strategies\n\n────────────────────────────────────\nSTRICT OUTPUT RULES (NON-NEGOTIABLE)\n────────────────────────────────────\n\n1. Output MUST be a SINGLE, FLAT JSON OBJECT\n2. Do NOT wrap the response in arrays\n3. Do NOT include markdown, comments, or explanations\n4. All required fields MUST be present\n5. All strings MUST be on one line (no line breaks)\n6. If a rule cannot be followed, return the closest valid JSON\n\n────────────────────────────────────\nREQUIRED JSON SCHEMA (EXACT)\n────────────────────────────────────\n{\n  \"intent_type\": \"SOLUTION\",\n  \"title\": \"string\",\n  \"h1\": \"string\",\n  \"outline\": [\n    {\n      \"h2\": \"string\",\n      \"h3\": [\"string\", \"string\"]\n    }\n  ],\n  \"faqs\": [\"string\", \"string\", \"string\", \"string\"]\n}\n\n────────────────────────────────────\nINPUT DATA\n────────────────────────────────────\nPrimary keyword: {{ $json.primary_keyword }}\nSecondary keywords: {{ $json.secondary_keywords }}\nSupporting keywords: {{ $json.other_relevant_keywords }}\nCompetitor structures: {{ $json.competitors }}\n\n────────────────────────────────────\nPHASE 1: SEARCH INTENT (MANDATORY)\n────────────────────────────────────\n\nintent_type MUST be exactly:\nSOLUTION\n\nThis page targets commercial comparison queries such as:\n- Best <solution category> solutions\n- Top <solution category> software for enterprises\n- Leading <solution category> providers\n\nThis is a buyer-focused solution comparison page, NOT a strategy guide.\n\n────────────────────────────────────\nPHASE 2: CANONICAL PAGE STRUCTURE (HARD-LOCKED)\n────────────────────────────────────\n\nThe outline MUST follow this EXACT structure and order.\n\nNO additional H2 sections are allowed.\n\nRequired H2s (exactly 4):\n\n1. What Is <Solution Category> Software?\n2. Top <Solution Category> Solutions for Enterprises\n3. Key Features and Capabilities to Evaluate in <Solution Category> Solutions\n4. Secure Your Enterprise with the Right <Solution Category> Solution\n\nRules:\n- Do NOT rename, reorder, add, or remove H2s\n- H2 #4 MUST be action-oriented and buyer-decisive\n- H2 #4 MUST NOT contain any H3s\n\n────────────────────────────────────\nPHASE 3: SOLUTION LIST RULES (CRITICAL)\n────────────────────────────────────\n\nFor H2: “Top <Solution Category> Solutions for Enterprises”\n\nRules:\n1. H3s MUST be company or vendor names ONLY\n2. Do NOT include product names, SKUs, editions, or branded platform labels\n3. Do NOT include descriptors such as Platform, Access, Exchange, Cloud, SASE, Zero Trust, Secure\n4. Each H3 represents one commonly recognized enterprise solution provider\n5. Include 8–12 providers\n6. Order SHOULD reflect common enterprise consideration or market presence\n\n────────────────────────────────────\nPHASE 4: FEATURE-BASED EVALUATION RULES (CRITICAL)\n────────────────────────────────────\n\nFor H2: “Key Features and Capabilities to Evaluate in <Solution Category> Solutions”\n\nRules:\n1. H3s MUST describe features, capabilities, or functional criteria buyers evaluate\n2. H3s MUST be written as “what to look for” when choosing a solution\n3. H3s MUST be solution-agnostic and vendor-neutral\n4. H3s MUST focus on product capabilities, not buying process steps\n\nH3s MUST NOT:\n- Describe how to implement or deploy the solution\n- Reference pilots, rollouts, or execution phases\n- Mention integrations, APIs, or tooling ecosystems\n- Use process-oriented verbs such as planning, running, building, mapping\n\nExamples:\nCorrect:\n- Policy granularity and contextual access enforcement\n- Coverage across users, devices, and application types\n- Visibility, analytics, and threat detection depth\n\nIncorrect:\n- Running pilots to validate assumptions\n- Mapping requirements to use cases\n- Integrating with IAM and SIEM tools\n\nInclude 4–6 H3s.\n\n────────────────────────────────────\nPHASE 5: DEFINITION SECTION CONSTRAINTS\n────────────────────────────────────\n\nFor “What Is <Solution Category> Software?”:\n\n- Focus ONLY on the defenition of that software not to include any H3s\n\n────────────────────────────────────\nPHASE 6: COMPETITOR STRUCTURE NORMALIZATION\n────────────────────────────────────\n\nCompetitor structures are the PRIMARY reference for validation.\n\nRules:\n- Match the structural simplicity of top-ranking competitors\n- Do NOT introduce analyst-style expansion\n- If competitors do not include a concept, DO NOT invent it\n\n────────────────────────────────────\nPHASE 7: TECHNICAL AND SEO REQUIREMENTS (2026)\n────────────────────────────────────\n\nRules:\n- Title MUST include a year reference (2025 or 2026)\n- Title MUST indicate plurality (Best, Top, or Leading)\n- H1 MUST clearly reflect solution-category intent\n- Language must be technical, neutral, and enterprise-appropriate\n- Reference Zero Trust or identity context ONLY when directly relevant\n\n────────────────────────────────────\nPHASE 8: FAQs (MANDATORY)\n────────────────────────────────────\n\nProvide EXACTLY 4 FAQs.\n\nFAQ rules:\n- Reflect real buyer search queries\n- Focus on feature evaluation, selection criteria, and enterprise relevance\n- Neutral, factual, and non-promotional\n- Do NOT mention vendors or products by name\n\n────────────────────────────────────\nFINAL INSTRUCTION\n────────────────────────────────────\n\nReturn ONLY the JSON object.\nNo markdown.\nNo explanations.\nNo additional text.\n",
+        "hasOutputParser": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3,
+      "position": [
+        1792,
+        2528
+      ],
+      "id": "9456d379-02ee-4673-bc72-16a7701f4931",
+      "name": "Solutions",
+      "retryOnFail": true,
+      "waitBetweenTries": 3000
+    },
+    {
+      "parameters": {
+        "amount": 1
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        4160,
+        2432
+      ],
+      "id": "f110f5b0-10d3-454d-885f-2c1deba5f035",
+      "name": "Wait2",
+      "webhookId": "38d482c9-c4d1-4e33-bf07-3534675d2d06"
+    },
+    {
+      "parameters": {
+        "amount": 45
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        4256,
+        1584
+      ],
+      "id": "eba5594e-b9dd-4153-8206-87eb70a823c2",
+      "name": "Wait3",
+      "webhookId": "a7062d3f-f59f-4c2b-a7c6-2190574bcab3"
+    },
+    {
+      "parameters": {
+        "amount": 45
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        4192,
+        880
+      ],
+      "id": "68594210-c154-48e6-b0d2-663ac06ac692",
+      "name": "Wait4",
+      "webhookId": "f56e6ad3-a034-436e-b323-2b7bdcc4ecda"
+    },
+    {
+      "parameters": {
+        "amount": 1
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        5808,
+        1568
+      ],
+      "id": "d70e859d-ddab-4afe-8d41-d3ba74cc2782",
+      "name": "Wait5",
+      "webhookId": "d731172c-aa24-4596-a095-f9e33f7993c8"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1hRJ5G5B9geJZN11LNmcn-n4gdNxtfH_H_9ghGub4vwQ",
+          "mode": "list",
+          "cachedResultName": "SEO_Keyword_Agent",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1hRJ5G5B9geJZN11LNmcn-n4gdNxtfH_H_9ghGub4vwQ/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 315247420,
+          "mode": "list",
+          "cachedResultName": "SEO_Content_Brief",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1hRJ5G5B9geJZN11LNmcn-n4gdNxtfH_H_9ghGub4vwQ/edit#gid=315247420"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "generated_date": "={{ $json.generated_date }}",
+            "primary_keyword": "={{ $json.primary_keyword }}",
+            "secondary_keywords": "={{ $json.secondary_keywords }}",
+            "other_relevant_keywords": "={{ $json.other_relevant_keywords }}",
+            "content_title": "={{ $json.content_title }}",
+            "h1": "={{ $json.h1 }}",
+            "generated_h2s": "={{ $json.generated_h2s }}",
+            "generated_h3s": "={{ $json.generated_h3s }}",
+            "generated_faqs": "={{ $json.generated_faqs }}",
+            "missing_h2s": "={{ $json.missing_h2s }}",
+            "missing_h3s": "={{ $json.missing_h3s }}",
+            "missing_faqs": "={{ $json.missing_faqs }}",
+            "missing_keywords": "={{ $json.missing_keywords }}",
+            "content_gap_summary": "={{ $json.content_gap_summary }}",
+            "primary_persona": "={{ $json.primary_persona }}",
+            "secondary_persona": "={{ $json.secondary_persona }}",
+            "buyer_journey_stage": "={{ $json.buyer_journey_stage }}",
+            "content_angle": "={{ $json.content_angle }}",
+            "audience_analysis_summary": "={{ $json.audience_analysis_summary }}",
+            "search_intent": "={{ $json.search_intent_focus }}",
+            "secondary_intent": "={{ $json.intent_type }}",
+            "priority_keywords": "={{ $json.semantic_keyword_opportunities }}",
+            "recommended_format": "={{ $json.recommended_content_type }}",
+            "recommended_length": "={{ $json.recommended_article_length }}",
+            "primary_cta": "={{ $json.primary_cta }}",
+            "secondary_cta": "={{ $json.secondary_cta }}",
+            "lead_magnet": "={{ $json.lead_magnet }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "generated_date",
+              "displayName": "generated_date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "primary_keyword",
+              "displayName": "primary_keyword",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "secondary_keywords",
+              "displayName": "secondary_keywords",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "other_relevant_keywords",
+              "displayName": "other_relevant_keywords",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "content_title",
+              "displayName": "content_title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "h1",
+              "displayName": "h1",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "generated_h2s",
+              "displayName": "generated_h2s",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "generated_h3s",
+              "displayName": "generated_h3s",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "generated_faqs",
+              "displayName": "generated_faqs",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "missing_h2s",
+              "displayName": "missing_h2s",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "missing_h3s",
+              "displayName": "missing_h3s",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "missing_faqs",
+              "displayName": "missing_faqs",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "missing_keywords",
+              "displayName": "missing_keywords",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "content_gap_summary",
+              "displayName": "content_gap_summary",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "primary_persona",
+              "displayName": "primary_persona",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "secondary_persona",
+              "displayName": "secondary_persona",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "buyer_journey_stage",
+              "displayName": "buyer_journey_stage",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "content_angle",
+              "displayName": "content_angle",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "audience_analysis_summary",
+              "displayName": "audience_analysis_summary",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "search_intent",
+              "displayName": "search_intent",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "secondary_intent",
+              "displayName": "secondary_intent",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "priority_keywords",
+              "displayName": "priority_keywords",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "recommended_format",
+              "displayName": "recommended_format",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "recommended_length",
+              "displayName": "recommended_length",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "primary_cta",
+              "displayName": "primary_cta",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "secondary_cta",
+              "displayName": "secondary_cta",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "lead_magnet",
+              "displayName": "lead_magnet",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        7008,
+        1536
+      ],
+      "id": "b47ba7fb-ccf3-4f2c-b284-dd851b9523c9",
+      "name": "Append row in sheet1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "4KWntwejoQUi4Wkz",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "height": 2784,
+        "width": 3088,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -32,
+        320
+      ],
+      "typeVersion": 1,
+      "id": "952105cf-48d1-4cb8-a0ed-7b78a6657696",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "height": 992,
+        "width": 2128,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        3056,
+        320
+      ],
+      "typeVersion": 1,
+      "id": "9130a888-9f94-4052-8ad0-cae30eb1e174",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "height": 880,
+        "width": 2128,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        3056,
+        1312
+      ],
+      "typeVersion": 1,
+      "id": "021fabbc-412a-4816-9326-06621d18c313",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "height": 912,
+        "width": 2128
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        3056,
+        2192
+      ],
+      "typeVersion": 1,
+      "id": "c86299d0-aa64-4d8f-8604-6259a599c8ee",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "height": 2784,
+        "width": 2144,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        5184,
+        320
+      ],
+      "typeVersion": 1,
+      "id": "9f3dec40-b036-4d64-979f-ba9846fca0a0",
+      "name": "Sticky Note4"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript7",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "competitor website": {
+      "main": [
+        [
+          {
+            "node": "Extract HTML",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract HTML": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request1": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request2": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Sheets Trigger": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Get row(s) in sheet",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Edit Fields3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          },
+          {
+            "node": "Code in JavaScript5",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge2",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge3",
+            "type": "main",
+            "index": 1
+          },
+          {
+            "node": "Merge4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields3": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript8",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append row in sheet": {
+      "main": [
+        [
+          {
+            "node": "Wait1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript2": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 2
+          },
+          {
+            "node": "Merge2",
+            "type": "main",
+            "index": 2
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [],
+        [
+          {
+            "node": "competitor website",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait1": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser1": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Check list",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript4": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript5": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge1": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript16",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge3",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge4",
+            "type": "main",
+            "index": 1
+          },
+          {
+            "node": "Merge5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript7": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Tool comparison",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser2": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Alternatives",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser3": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "What is",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser4": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Concept comparison",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript8": {
+      "main": [
+        [
+          {
+            "node": "Text Classifier",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Text Classifier": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript9",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Code in JavaScript10",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Code in JavaScript11",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Code in JavaScript12",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Code in JavaScript13",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Code in JavaScript14",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript9": {
+      "main": [
+        [
+          {
+            "node": "What is",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript10": {
+      "main": [
+        [
+          {
+            "node": "Tool comparison",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript11": {
+      "main": [
+        [
+          {
+            "node": "Check list",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript12": {
+      "main": [
+        [
+          {
+            "node": "Alternatives",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript13": {
+      "main": [
+        [
+          {
+            "node": "Concept comparison",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser5": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Solutions",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript14": {
+      "main": [
+        [
+          {
+            "node": "Solutions",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Check list",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model5": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Solutions",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model4": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Concept comparison",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model3": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Alternatives",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Tool comparison",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model6": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Text Classifier",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model7": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Content Gap Analysis",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser6": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Content Gap Analysis",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model2": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "What is",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript16": {
+      "main": [
+        [
+          {
+            "node": "Wait4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model8": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Audience Persona Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser7": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Audience Persona Agent",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge2": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript17",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript17": {
+      "main": [
+        [
+          {
+            "node": "Wait3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Content Gap Analysis": {
+      "main": [
+        [
+          {
+            "node": "Merge2",
+            "type": "main",
+            "index": 1
+          },
+          {
+            "node": "Merge3",
+            "type": "main",
+            "index": 2
+          },
+          {
+            "node": "Merge4",
+            "type": "main",
+            "index": 2
+          },
+          {
+            "node": "Merge5",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model9": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Content Strategy Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser8": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Content Strategy Agent",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript18": {
+      "main": [
+        [
+          {
+            "node": "Wait2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge3": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript18",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Audience Persona Agent": {
+      "main": [
+        [
+          {
+            "node": "Merge3",
+            "type": "main",
+            "index": 3
+          },
+          {
+            "node": "Merge4",
+            "type": "main",
+            "index": 3
+          },
+          {
+            "node": "Merge5",
+            "type": "main",
+            "index": 2
+          }
+        ]
+      ]
+    },
+    "Merge4": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript19",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Content Strategy Agent": {
+      "main": [
+        [
+          {
+            "node": "Merge4",
+            "type": "main",
+            "index": 4
+          },
+          {
+            "node": "Merge5",
+            "type": "main",
+            "index": 3
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript19": {
+      "main": [
+        [
+          {
+            "node": "Wait5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model10": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "SEO Recommendation Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser9": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "SEO Recommendation Agent",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SEO Recommendation Agent": {
+      "main": [
+        [
+          {
+            "node": "Merge5",
+            "type": "main",
+            "index": 4
+          }
+        ]
+      ]
+    },
+    "Merge5": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "What is": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tool comparison": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check list": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Alternatives": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Concept comparison": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Solutions": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait2": {
+      "main": [
+        [
+          {
+            "node": "Content Strategy Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait3": {
+      "main": [
+        [
+          {
+            "node": "Audience Persona Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait4": {
+      "main": [
+        [
+          {
+            "node": "Content Gap Analysis",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait5": {
+      "main": [
+        [
+          {
+            "node": "SEO Recommendation Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript6": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "8cd38f5d-0903-4f23-8266-11bde75c33d7",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "9b0fbf497ff4dae0b5ad52fa8e8be532f0567786578db6ecb983c84e3cdc0418"
+  },
+  "id": "MJsmDTByEQuxnMxF",
+  "tags": []
+}
