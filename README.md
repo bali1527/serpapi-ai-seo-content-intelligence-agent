@@ -1,876 +1,682 @@
-SerpApi AI SEO Content Intelligence Agent
+# SerpApi AI SEO Content Intelligence Agent
 
-An AI-powered SEO research and content planning automation built with **n8n, SerpApi, Gemini, and Google Sheets**.
+**Automated SEO research, competitor analysis, and AI-powered content planning using SerpApi, n8n, Gemini, and Google Sheets.**
 
-The project automates keyword research, search engine results page (SERP) analysis, competitor content research, audience analysis, content gap identification, and SEO content planning through a connected workflow of APIs, data-processing nodes, and AI agents.
-
----
-
-## Table of Contents
-
-- [1. Project Overview](#1-project-overview)
-- [2. Problem Statement](#2-problem-statement)
-- [3. Project Objectives](#3-project-objectives)
-- [4. Key Features](#4-key-features)
-- [5. Technology Stack](#5-technology-stack)
-- [6. Workflow Architecture](#6-workflow-architecture)
-- [7. How the Workflow Works](#7-how-the-workflow-works)
-- [8. Prerequisites](#8-prerequisites)
-- [9. Repository Structure](#9-repository-structure)
-- [10. Installation and Setup](#10-installation-and-setup)
-- [11. Google Sheets Configuration](#11-google-sheets-configuration)
-- [12. Importing the n8n Workflow](#12-importing-the-n8n-workflow)
-- [13. Configuring Credentials](#13-configuring-credentials)
-- [14. Running the Workflow](#14-running-the-workflow)
-- [15. Expected Outputs](#15-expected-outputs)
-- [16. Customization](#16-customization)
-- [17. Troubleshooting](#17-troubleshooting)
-- [18. Security and Best Practices](#18-security-and-best-practices)
-- [19. SerpApi Integration](#19-serpapi-integration)
-- [20. AI Usage Disclosure](#20-ai-usage-disclosure)
-- [21. Limitations](#21-limitations)
-- [22. Future Enhancements](#22-future-enhancements)
-- [23. Demo](#23-demo)
-- [24. Author](#24-author)
-- [25. License](#25-license)
-
----
+[![Built with n8n](https://img.shields.io/badge/Automation-n8n-orange)](https://n8n.io/)
+[![Search API-SerpApi](https://img.shields.io/badge/Search%20API-SerpApi-blue)](https://serpapi.com/)
+[![AI-Gemini](https://img.shields.io/badge/AI-Gemini-4285F4)](https://ai.google.dev/)
+[![Output-Google Sheets](https://img.shields.io/badge/Output-Google%20Sheets-34A853)](https://sheets.google.com/)
 
 ## 1. Project Overview
 
-The **SerpApi AI SEO Content Intelligence Agent** is an automated research and content planning system designed to reduce the manual effort involved in preparing SEO content briefs.
+The **SerpApi AI SEO Content Intelligence Agent** is an automated SEO research and content planning workflow built using n8n, SerpApi, AI models, and Google Sheets.
 
-Given a target keyword, the workflow retrieves Google search results through SerpApi, identifies relevant competitor pages, extracts their content headings, and uses AI models to analyze the collected research.
+The workflow takes a target keyword, retrieves Google search results through SerpApi, identifies relevant competitor pages, extracts available competitor headings, and uses AI agents to analyze the collected research.
 
-The workflow can combine competitor content, keyword research, and search intent signals to generate structured SEO deliverables, including content outlines, audience insights, content gap analysis, content strategy, and SEO recommendations.
+The collected information is used to support content gap analysis, audience persona research, content strategy development, SEO recommendations, and content outline generation. The results are consolidated into structured data and stored in Google Sheets for further review.
 
-The generated information is organized and stored in Google Sheets for further review and content production.
-
-### Example use case
-
-**Input keyword:** `sso solutions`
-
-The workflow researches relevant search results and competitor pages, identifies recurring topics and potential content opportunities, and generates an SEO content plan aligned with the target search intent.
-
-### Intended users
-
-- SEO professionals
-- Content strategists
-- Digital marketing teams
-- Content writers
-- SaaS marketing teams
-- Developers building AI-powered research automations
-
----
+The primary goal is to reduce repetitive manual SEO research and help content strategists develop more informed, search-intent-aligned content plans.
 
 ## 2. Problem Statement
 
-Preparing an SEO content brief typically requires several manual activities:
+Preparing a high-quality SEO content brief requires multiple research activities, including:
 
-- Researching search results for a target keyword.
-- Finding relevant competitor pages.
-- Reviewing competitor headings and content structure.
-- Collecting related and secondary keywords.
-- Understanding search intent and audience needs.
-- Identifying topics that competing pages may not cover adequately.
-- Planning article structure and content recommendations.
-- Organizing the research in a reusable document or spreadsheet.
+- Researching Google search results for target keywords.
+- Identifying relevant competitor pages.
+- Reviewing competitor content structures and headings.
+- Collecting related and secondary keyword opportunities.
+- Understanding search intent and audience requirements.
+- Identifying potential content gaps.
+- Developing an appropriate content strategy.
+- Organizing the findings into a structured content plan.
 
-Performing these tasks manually can be time-consuming and difficult to repeat consistently across many keywords.
+Performing these tasks manually can be time-consuming, particularly when the process needs to be repeated for multiple keywords.
 
-This project combines search data, workflow automation, and AI-assisted analysis into a single research pipeline.
-
----
+This project combines search intelligence, automated data collection, and AI-assisted analysis into a unified workflow to simplify the SEO research process.
 
 ## 3. Project Objectives
 
-The primary objectives are to:
+The project aims to:
 
-1. Automate SERP research using SerpApi.
-2. Discover and filter relevant competitor URLs.
-3. Extract competitor headings for content structure analysis.
+1. Automate Google SERP research using SerpApi.
+2. Discover, filter, and deduplicate competitor URLs.
+3. Extract available H2 and H3 headings from competitor pages.
 4. Organize keyword and competitor research into structured data.
-5. Use AI agents to analyze content opportunities and audience needs.
-6. Generate search-intent-aligned content planning recommendations.
-7. Consolidate research outputs into Google Sheets.
-8. Create a repeatable workflow that can be reused for multiple target keywords.
-
----
+5. Analyze search intent and potential content opportunities.
+6. Generate audience insights and content planning recommendations.
+7. Produce structured SEO research outputs using AI agents.
+8. Store the generated results in Google Sheets.
+9. Provide a reusable workflow for keyword-driven SEO content planning.
 
 ## 4. Key Features
 
-### 4.1 SERP Research
+### 4.1 SERP Research with SerpApi
 
-Uses SerpApi to retrieve Google search results for a target keyword and identify relevant organic search listings.
+Retrieves Google search results for a target keyword and identifies relevant organic search listings. These results provide the starting point for competitor discovery and subsequent analysis.
 
-### 4.2 Competitor URL Discovery
+### 4.2 Competitor URL Discovery and Filtering
 
-Collects competitor URLs from search results, filters unwanted domains, removes duplicate URLs, and selects a limited set of pages for further analysis.
+Processes the URLs returned by the search stage, removes duplicates, filters unwanted domains, and limits the number of competitor pages selected for analysis.
 
-### 4.3 Competitor Content Extraction
+### 4.3 Competitor Heading Extraction
 
-Uses HTTP requests and HTML extraction to collect relevant headings, particularly H2 and H3 elements, from accessible competitor pages.
+Fetches accessible competitor pages and extracts relevant headings, particularly H2 and H3 elements, to understand how competing pages organize their content.
 
 ### 4.4 Keyword Research and Organization
 
-Organizes primary keywords, secondary keywords, and other relevant keyword opportunities. If the configured keyword research integration is enabled, its results can contribute additional keyword insights.
+Organizes primary keywords, secondary keywords, and other relevant keyword opportunities for downstream SEO analysis.
+
+Additional keyword metrics depend on the research integrations configured in the workflow.
 
 ### 4.5 Search Intent Analysis
 
-Uses classification and AI-assisted analysis to help identify the likely intent behind a target keyword and route it to an appropriate content-planning approach.
+Uses the configured classification logic and AI prompts to identify the likely search intent and guide the content planning process.
 
-### 4.6 Content Gap Analysis
+### 4.6 Content Gap Analysis Agent
 
-Analyzes the collected competitor research to identify potential topic gaps, missing subtopics, and opportunities for stronger content coverage.
+Analyzes available competitor research to identify potential missing topics, undercovered subtopics, and opportunities to improve content coverage.
 
-### 4.7 Audience Persona Analysis
+### 4.7 Audience Persona Agent
 
-Uses the keyword, search intent, and available research context to develop audience insights, including likely pain points, goals, decision factors, and desired outcomes.
+Uses the target keyword, search intent, and available research context to generate audience insights, such as likely pain points, goals, decision factors, and desired outcomes.
 
-### 4.8 Content Strategy Generation
+### 4.8 Content Strategy Agent
 
-Generates content planning recommendations based on the target keyword, search intent, competitor research, and audience analysis.
+Uses the research findings to develop content planning recommendations aligned with the target keyword and audience needs.
 
-### 4.9 SEO Recommendations
+### 4.9 SEO Recommendation Agent
 
-Produces recommendations for content format, article structure, keyword coverage, content length, and other SEO planning considerations supported by the workflow inputs.
+Generates SEO planning recommendations based on the available keyword information, competitor research, search intent, and AI analysis.
 
-### 4.10 Google Sheets Integration
+### 4.10 Content Outline Generation
 
-Stores structured research results in Google Sheets so the information can be reviewed, organized, and reused in the content production process.
+Produces a proposed content structure, including a suggested title, H1, H2 headings, and H3 subheadings, according to the configured prompts and output format.
 
----
+### 4.11 Automated Google Sheets Storage
+
+Combines the generated research into structured fields and writes the results to Google Sheets for review and further content planning.
 
 ## 5. Technology Stack
 
 | Technology | Purpose |
 |---|---|
 | n8n | Workflow orchestration and automation |
-| SerpApi | Google search results retrieval |
-| Google Sheets | Keyword input and research output storage |
+| SerpApi | Google search results and competitor discovery |
 | Gemini | AI-assisted research and content analysis |
-| HTTP Request nodes | Retrieving competitor web pages |
-| HTML extraction | Extracting headings and page content |
-| JavaScript Code nodes | Filtering URLs, removing duplicates, and transforming data |
-| Output parsers | Structuring AI-generated responses |
-| Apify / SEMrush integration, if enabled | Additional keyword research data |
+| Google Sheets | Keyword input and structured output storage |
+| HTTP Request nodes | Fetching competitor web pages |
+| HTML extraction | Extracting competitor headings |
+| JavaScript Code nodes | URL filtering, deduplication, and data transformation |
+| AI Agent nodes | Content gap, audience, strategy, and SEO analysis |
+| Structured Output Parser | Validating the expected structure of AI responses |
 
-**Note:** The integrations and models required depend on the exact workflow export. Configure only the services used by the nodes included in your version of the workflow.
-
----
+Additional integrations, such as Apify or external keyword research services, may be used where configured in the workflow.
 
 ## 6. Workflow Architecture
 
-The workflow follows a research-to-recommendation pipeline.
+The workflow follows a keyword-to-content-intelligence pipeline.
+
+### Architecture Overview
+
+![Complete n8n Workflow Architecture](docs/Workflow_architecture.png)
+
+The color-coded sections in the n8n canvas organize the workflow into logical processing stages, making the connections between research, analysis, and output easier to understand.
+
+### High-Level Data Flow
 
 ```mermaid
 flowchart TD
-    A[Google Sheets: Target Keywords]
-    B[SerpApi: Google Search]
+    A[Keyword Input]
+    B[SerpApi Google Search]
     C[Extract Organic Results]
     D[Filter and Deduplicate URLs]
     E[Fetch Competitor Pages]
     F[Extract H2 and H3 Headings]
     G[Combine Research Data]
-    H[Search Intent Classification]
+    H[Search Intent Analysis]
     I[AI Content Analysis]
-    J[Audience Persona Analysis]
-    K[Content Strategy]
-    L[SEO Recommendations]
-    M[Combine and Structure Outputs]
-    N[Google Sheets: Final Results]
+    J[Combine Structured Results]
+    K[Google Sheets Output]
 
-    A --> B --> C --> D --> E --> F
-    F --> G
-    G --> H
-    H --> I
-    I --> J
-    J --> K
-    K --> L
-    L --> M --> N
+    A --> B --> C --> D --> E --> F --> G
+    G --> H --> I --> J --> K
 ```
 
-The diagram is a conceptual representation of the research pipeline. The actual execution order and branching should follow the exported n8n workflow.
-
-### Main workflow stages
-
-1. **Input:** Read target keywords and associated research parameters.
-2. **Search:** Retrieve current Google search results through SerpApi.
-3. **Filtering:** Remove blocked domains and duplicate URLs.
-4. **Extraction:** Fetch accessible competitor pages and extract useful headings.
-5. **Analysis:** Combine research data and analyze search intent, content gaps, and audience needs.
-6. **Recommendation:** Generate content strategy and SEO recommendations.
-7. **Storage:** Map the generated fields and save the results in Google Sheets.
-
----
+The actual n8n workflow may contain additional branches, supporting nodes, and parallel processing stages. The diagram above summarizes the main research pipeline.
 
 ## 7. How the Workflow Works
 
-### Step 1: Provide a target keyword
+### Step 1: Keyword Input
 
-The workflow starts with a keyword supplied through the configured Google Sheets input or another configured trigger.
+The workflow receives a target keyword through the configured Google Sheets input or another configured input node.
 
 Example:
 
-```text
-sso solutions
-```
+` sso solutions `
 
-Secondary keywords and additional research parameters may also be supplied when available.
+Secondary keywords and other research parameters may also be provided when available.
 
-### Step 2: Retrieve search results using SerpApi
+### Step 2: Search with SerpApi
 
-The workflow sends a Google Search request through SerpApi.
+The workflow sends a Google Search request through SerpApi and retrieves the relevant search results.
 
-The returned search results are used to discover relevant organic listings and competitor URLs.
+The returned organic listings provide competitor URLs for the research pipeline.
 
-### Step 3: Filter competitor URLs
+### Step 3: Competitor URL Processing
 
-A Code node processes the collected URLs.
+A JavaScript Code node processes the collected URLs.
 
-The filtering stage can:
+The processing stage can:
 
-- Ignore missing or invalid URLs.
-- Exclude domains specified in the blocked-domain list.
+- Skip missing or invalid URLs.
+- Filter configured blocked domains.
 - Remove duplicate URLs.
-- Limit the number of competitor pages selected for extraction.
+- Limit the number of competitor pages to process.
 
-This helps focus the research on a manageable set of relevant pages.
+This helps focus subsequent requests on a manageable set of research targets.
 
-### Step 4: Fetch competitor pages
+### Step 4: Competitor Page Retrieval
 
-The HTTP Request nodes attempt to retrieve the selected competitor pages.
+HTTP Request nodes attempt to retrieve the selected competitor pages.
 
-Some sites may reject automated requests, restrict access, or take too long to respond. The workflow should handle these failures without unnecessarily stopping the remaining research.
+The workflow must account for websites that respond slowly, restrict automated access, or return errors. Failed page requests should be handled without unnecessarily interrupting the entire research process.
 
-### Step 5: Extract competitor headings
+### Step 5: Heading Extraction
 
-HTML extraction nodes collect available headings, particularly H2 and H3 elements.
+HTML extraction nodes collect available H2 and H3 headings from accessible pages.
 
-These headings provide a structured view of how competing pages organize their content.
+These headings provide a structured representation of competitor content organization and serve as research input for the analysis stages.
 
-The extracted information can be combined for downstream analysis.
+### Step 6: Research Data Preparation
 
-### Step 6: Prepare the research dataset
+The workflow combines the collected search results, competitor headings, keyword information, and other configured research data.
 
-The workflow combines the available search results, extracted headings, keyword information, and other configured research data.
+JavaScript Code nodes can normalize fields, filter irrelevant values, remove duplicates, and prepare the data for AI analysis.
 
-Code nodes can normalize field names, remove duplicates, filter irrelevant values, and prepare the data for AI analysis.
+### Step 7: Search Intent Analysis
 
-### Step 7: Analyze search intent
+The configured classifier or AI model analyzes the target keyword and available research context to determine the likely search intent.
 
-The configured classifier or AI model evaluates the keyword and supporting research to determine the appropriate search-intent category.
+The resulting classification helps guide the content planning and recommendation process.
 
-Possible intent categories depend on the workflow's configured classification prompts.
+### Step 8: AI Agent Analysis
 
-The resulting intent can guide the content structure and recommendations.
+The workflow uses its configured AI agents to analyze the collected research.
 
-### Step 8: Generate content insights with AI
+Depending on the implemented configuration, these agents generate:
 
-The workflow uses AI agents or model nodes to analyze the available research.
-
-Depending on the configured agents, this can include:
-
-- Content gap analysis.
-- Audience persona analysis.
-- Content strategy generation.
+- Content gap insights.
+- Audience persona insights.
+- Content strategy recommendations.
 - SEO recommendations.
-- Content outline generation.
+- Content outline suggestions.
 
-Structured output parsers can be used to enforce the expected response format.
+The quality of these outputs depends on the available research data, prompts, model capabilities, and output validation.
 
-### Step 9: Combine the results
+### Step 9: Output Consolidation
 
-A Code node maps the individual research outputs into the final data structure.
+The generated agent outputs are combined and mapped into the final data structure.
 
-This stage is important because each output field must match the destination Google Sheets column.
+This stage ensures that the output fields correspond to the expected Google Sheets columns.
 
-### Step 10: Store the results
+### Step 10: Google Sheets Storage
 
-The Google Sheets node writes the final structured research into the configured spreadsheet.
+The final structured results are written to the configured Google Sheets worksheet.
 
-The resulting data can then be reviewed and used as a starting point for SEO content planning.
+The spreadsheet provides a centralized location for reviewing and reusing the generated SEO research.
 
----
+## 8. AI Model Selection and Output Quality
 
-## 8. Prerequisites
+The workflow's output quality depends partly on the AI model selected for each agent.
+
+Different models can vary in reasoning capability, contextual understanding, instruction following, structured output reliability, and the depth of their recommendations.
+
+A model that performs well for one task may produce weaker or less detailed results for another. Therefore, the generated content gap analysis, audience insights, content strategy, SEO recommendations, and content outlines may differ when the model is changed.
+
+### Model Used in This Workflow
+
+**Configured model: Gemini 3.8 Flash**  
+*Confirm the exact model name or model ID in your n8n configuration before publishing this documentation.*
+
+During testing, the configured Gemini Flash model produced strong results for the workflow's content research and planning tasks.
+
+Model selection should consider:
+
+- Quality and relevance of generated insights.
+- Ability to follow detailed prompts.
+- Reliability of structured JSON outputs.
+- Response time.
+- API availability and usage limits.
+- Cost and token consumption.
+
+### Why Results May Differ
+
+Generated results can change depending on:
+
+1. The selected AI model.
+2. The quality and completeness of the research inputs.
+3. The system and user prompts.
+4. The output parser and expected schema.
+5. The competitor pages successfully retrieved.
+6. The search results available at execution time.
+
+Consequently, changing the model may change the quality, structure, completeness, and usefulness of the final output.
+
+The model's performance should be evaluated using the same test keywords and inputs wherever possible. AI-generated recommendations should also be reviewed before being used in published content.
+
+## 9. Prerequisites
 
 Before setting up the workflow, ensure that you have the following.
 
-### Required services
+### Required
 
-- **n8n:** A working n8n instance, either self-hosted or hosted.
-- **SerpApi:** An account and API key for Google search requests.
-- **Google Sheets:** A Google account with access to create or edit a spreadsheet.
-- **AI provider:** Valid credentials for the AI model configured in the workflow.
+- A working n8n instance.
+- A SerpApi account and API key.
+- Access to the AI model configured in the workflow.
+- A Google account with Google Sheets access.
+- The exported n8n workflow JSON file.
 
-### Additional requirements, when applicable
+### Optional, depending on your configuration
 
-- Apify access and a valid token if an Apify actor is used.
-- Access to the relevant keyword research service if the workflow uses an external keyword research integration.
-- Any additional credentials or community nodes required by the exported workflow.
+- Apify credentials.
+- Access to an external keyword research service.
+- Additional API credentials required by specific workflow nodes.
 
-### Basic knowledge
+### Documentation
 
-Familiarity with n8n nodes, Google Sheets, API credentials, and basic JSON concepts will make setup easier.
+- n8n: https://docs.n8n.io/
+- SerpApi: https://serpapi.com/search-api
+- Gemini API: https://ai.google.dev/gemini-api/docs
+- Google Sheets: https://support.google.com/docs/
 
----
-
-## 9. Repository Structure
-
-The repository is intended to use the following structure:
+## 10. Repository Structure
 
 ```text
 serpapi-ai-seo-content-intelligence-agent/
 │
 ├── README.md
+├── Hackathon Workflow.json
 │
-├── workflows/
-│   └── seo-content-intelligence.json
-│
-├── docs/
-│   ├── architecture.md
-│   └── workflow-screenshot.png
-│
-├── .env.example
-│
-└── LICENSE
+└── docs/
+    ├── Workflow_architecture.png
+    ├── content-gap-analysis.png
+    ├── audience-persona.png
+    ├── content-strategy.png
+    ├── seo-recommendations.png
+    └── google-sheets-output.png
 ```
 
-### File descriptions
+The `docs` folder contains project screenshots when they have been uploaded. Only add filenames to this structure once the corresponding files exist in the repository.
 
-- `README.md` — Project overview and setup instructions.
-- `workflows/seo-content-intelligence.json` — Sanitized, exported n8n workflow.
-- `docs/architecture.md` — Detailed node descriptions and architecture.
-- `docs/workflow-screenshot.png` — Screenshot of the workflow architecture.
-- `.env.example` — Placeholder configuration names, if needed.
-- `LICENSE` — Project license, if one is selected.
+The workflow JSON is a sanitized export intended for importing into another n8n instance.
 
-Only include files that actually exist in the repository. Do not upload real credentials, private execution data, or sensitive exports.
+## 11. Installation and Setup
 
----
+### Step 1: Clone the Repository
 
-## 10. Installation and Setup
-
-Follow these steps to configure the project.
-
-### Step 1: Obtain the repository
-
-Clone the repository:
+Run the following command in a terminal:
 
 ```bash
 git clone https://github.com/bali1527/serpapi-ai-seo-content-intelligence-agent.git
 ```
 
-Navigate into the project directory:
+Navigate to the project directory:
 
 ```bash
 cd serpapi-ai-seo-content-intelligence-agent
 ```
 
-Alternatively, use GitHub's **Code → Download ZIP** option to download the repository.
+Alternatively, download the repository using GitHub's **Code → Download ZIP** option.
 
 ### Step 2: Open n8n
 
 Open your existing n8n instance.
 
-If you do not have an instance, follow the official n8n installation documentation:
+If you need to install or configure n8n, follow its official hosting documentation:
 
 https://docs.n8n.io/hosting/
 
-The project itself is an n8n workflow, so a separate Python application or Node.js backend is not required unless additional components are introduced.
+### Step 3: Import the Workflow
 
-### Step 3: Download the workflow file
-
-Locate the workflow JSON file in:
-
-```text
-workflows/seo-content-intelligence.json
-```
-
-If the file has a different name in the repository, use its actual name.
-
-### Step 4: Import the workflow
-
-In n8n:
-
-1. Open the workflow editor.
+1. Open the n8n workflow editor.
 2. Open the workflow menu.
-3. Select **Import from File**.
-4. Choose the downloaded workflow JSON.
-5. Review the imported nodes and connections.
-6. Check whether any required nodes or credentials need to be configured.
+3. Select the import option, such as **Import from File**.
+4. Select `Hackathon Workflow.json`.
+5. Wait for the workflow to load.
+6. Review the nodes, connections, and any warnings.
 
-Importing the workflow does not automatically configure every external service. Credentials and other dependencies must be configured in the target n8n instance.
+Importing the workflow does not automatically configure all external credentials or spreadsheet references.
 
-### Step 5: Configure credentials
+### Step 4: Configure Credentials
 
-Set up the credentials required by the imported nodes.
+Set up the credentials required by the SerpApi, AI model, Google Sheets, and any optional integration nodes.
 
-See [Configuring Credentials](#13-configuring-credentials).
+Refer to [Configuring Credentials](#13-configuring-credentials).
 
-### Step 6: Configure Google Sheets
+### Step 5: Configure Google Sheets
 
-Create or select your own spreadsheet and ensure the input and output sheets match the columns expected by the workflow.
+Select your own spreadsheet and ensure its worksheet names, columns, and data structure match the workflow configuration.
 
-See [Google Sheets Configuration](#11-google-sheets-configuration).
+Refer to [Google Sheets Configuration](#12-google-sheets-configuration).
 
-### Step 7: Review the workflow
+### Step 6: Review the Workflow
 
-Before execution, verify:
+Before execution, verify that:
 
-- All required credentials are assigned.
-- Google Sheets document and sheet references are correct.
-- The input keyword is available.
-- The SerpApi node is configured for the intended search.
-- Competitor filtering and extraction nodes are connected correctly.
-- AI model nodes and output parsers are configured.
-- Final field mappings match the output sheet headers.
+- All required credentials are configured.
+- The SerpApi node has valid search parameters.
+- Competitor URL filtering works correctly.
+- HTTP Request nodes are configured appropriately.
+- HTML extraction selectors match the expected content.
+- AI agents have the correct prompts and model settings.
+- Structured output parsers are connected where required.
+- The final Code node maps the correct fields.
+- The Google Sheets node points to the intended spreadsheet.
 
-### Step 8: Run a test
+### Step 7: Run a Test
 
-Execute the workflow with a test keyword such as `sso solutions`.
+Execute the workflow using a test keyword such as `sso solutions`.
 
-Inspect the execution data at each stage and verify that the final results are stored correctly.
+Inspect the intermediate node outputs and verify that the final research results are written to Google Sheets.
 
----
+## 12. Google Sheets Configuration
 
-## 11. Google Sheets Configuration
+Google Sheets is used to provide keyword inputs and store structured research outputs.
 
-The workflow uses Google Sheets for keyword input and structured output storage.
+### 12.1 Input Sheet
 
-The exact sheet names and column requirements should match the spreadsheet references in your imported workflow.
+Configure the input sheet according to the columns expected by the starting nodes.
 
-### 11.1 Input sheet
-
-Create a sheet containing the target keywords and any required research parameters.
-
-For example:
+Example:
 
 | primary_keyword | secondary_keywords |
 |---|---|
 | sso solutions | sso single sign on; enterprise sso |
 
-The actual required input fields depend on the configuration of your workflow's Google Sheets and data-processing nodes.
+This is an illustrative structure. Use the actual column names required by your workflow.
 
-### 11.2 Output sheet
+### 12.2 Output Sheet
 
-Create an output sheet with the column headers expected by the final Google Sheets node.
-
-For an outline-focused output, the columns may include:
+The current outline-focused output sheet may contain the following columns:
 
 | Column | Description |
 |---|---|
-| `generated_date` | Date the result was generated |
+| `generated_date` | Date of generation |
 | `primary_keyword` | Target keyword |
 | `secondary_keywords` | Related keywords |
 | `other_relevant_keywords` | Additional keyword opportunities |
-| `content_title` | Suggested content title |
-| `h1` | Generated H1 heading |
+| `content_title` | Generated content title |
+| `h1` | Main heading |
 | `generated_h2s` | Generated H2 headings |
 | `generated_h3s` | Generated H3 headings |
 
-If your workflow also stores audience research, content gap analysis, strategy, or SEO recommendations, include the corresponding columns required by those output mappings.
+If your final workflow also stores content gap analysis, audience personas, content strategy, or SEO recommendations, configure the corresponding columns and mappings as required.
 
-**Important:** Column headers and field mappings must match. Incorrect names or incompatible data types can lead to missing or undefined values.
+### 12.3 Connect Google Sheets
 
-### 11.3 Connect Google Sheets
-
-1. Open the Google Sheets nodes in n8n.
-2. Select or create the appropriate Google Sheets credential.
+1. Open the relevant Google Sheets node.
+2. Select or create the required Google Sheets credential.
 3. Authorize access through your Google account.
-4. Select your own spreadsheet and the relevant worksheet.
-5. Confirm the expected operation, such as reading input rows or appending results.
-6. Test the node independently before executing the entire workflow.
+4. Select your spreadsheet and worksheet.
+5. Verify the read or write operation.
+6. Test the node independently.
 
-Never use another person's private spreadsheet or OAuth credentials when setting up your own instance.
-
----
-
-## 12. Importing the n8n Workflow
-
-The workflow is distributed as JSON because n8n supports exporting and importing workflows in JSON format.
-
-Official documentation:
-
-https://docs.n8n.io/workflows/export-import/
-
-### Import checklist
-
-After importing:
-
-- Confirm that the workflow opens without errors.
-- Verify that node connections are intact.
-- Reassign credentials where required.
-- Check any hardcoded spreadsheet references.
-- Confirm that the AI nodes reference the intended models.
-- Check output parser schemas and Code node logic.
-- Test the workflow before activating any scheduled or automated trigger.
-
-Workflow exports can still contain sensitive values in node parameters, even when credential secrets themselves are not included. Inspect the JSON before sharing it publicly.
-
----
+Ensure that the final JSON keys and Google Sheets column headers match the expected mappings.
 
 ## 13. Configuring Credentials
 
-The workflow may require credentials for SerpApi, Gemini, Google Sheets, and any optional keyword research integrations.
+Credentials must be configured in your own n8n instance.
 
 ### 13.1 SerpApi
 
-1. Create or access your SerpApi account.
+1. Sign in to your SerpApi account.
 2. Obtain your API key.
-3. Open the SerpApi node in n8n.
-4. Configure the authentication method expected by that node.
-5. Save the credential securely and test the node.
+3. Open the SerpApi node.
+4. Configure the authentication method required by the node.
+5. Test the search request.
 
-SerpApi documentation:
-
-https://serpapi.com/search-api
+Documentation: https://serpapi.com/search-api
 
 ### 13.2 Gemini
 
 1. Obtain access to the Gemini API.
-2. Create the required API credential.
-3. Configure the corresponding Gemini or AI model node in n8n.
-4. Select the required model.
-5. Check the prompt and output settings.
-6. Execute the node with sample input.
+2. Configure the appropriate API credential in n8n.
+3. Select the intended model.
+4. Review the agent prompts and output configuration.
+5. Test each AI agent using sample input.
 
-Gemini API documentation:
-
-https://ai.google.dev/gemini-api/docs
+Documentation: https://ai.google.dev/gemini-api/docs
 
 ### 13.3 Google Sheets
 
-1. Open the relevant Google Sheets node.
-2. Create or select the supported Google Sheets OAuth credential.
-3. Complete the required Google authorization process.
-4. Select the target spreadsheet.
-5. Verify that the credential can read or write to the selected sheet.
+1. Open the Google Sheets node.
+2. Select the appropriate Google Sheets OAuth credential.
+3. Complete the required authorization.
+4. Select your own spreadsheet and worksheet.
+5. Confirm that the node can read or write data.
 
-If your n8n configuration requires a Google OAuth Client ID and Client Secret, configure them using the appropriate secure credential or OAuth setup. Do not publish the secret in the repository.
+If a Google OAuth Client ID and Client Secret are required, configure them securely using the appropriate credential setup. Never publish the client secret.
 
-### 13.4 Optional integrations
+### 13.4 Optional Integrations
 
-If the workflow contains an Apify actor or another keyword research service, configure its credentials according to that provider's documentation.
+If your imported workflow includes Apify or other research services, configure their credentials separately according to the relevant provider's documentation.
 
-Only configure integrations that are actually used by your imported workflow.
+Only configure integrations that are actually used in your workflow.
 
----
+## 14. Running and Validating the Workflow
 
-## 14. Running the Workflow
+Follow this checklist during a test execution.
 
-After completing setup, follow this execution procedure.
+1. Supply the target keyword.
+2. Execute the workflow.
+3. Confirm that SerpApi returns relevant search results.
+4. Check that the URL filtering node returns the expected competitor URLs.
+5. Confirm that accessible pages are fetched successfully.
+6. Verify that heading extraction returns usable H2 and H3 data.
+7. Inspect the AI agent outputs for meaningful insights.
+8. Confirm that structured outputs match the expected schemas.
+9. Check the final Code node's field mappings.
+10. Open Google Sheets and confirm that the results have been stored correctly.
 
-### Step 1: Prepare the keyword
+A successful run should be validated at three levels:
 
-Add a test keyword to the configured input sheet or input node.
+- **Research:** Relevant search results and competitor data are collected.
+- **Analysis:** AI agents produce meaningful outputs in the expected format.
+- **Storage:** The final results are correctly mapped to Google Sheets.
 
-Example:
+## 15. Workflow Screenshots and Results
 
-```text
-sso solutions
-```
+The following screenshots can be used to demonstrate the workflow's implementation and actual outputs.
 
-### Step 2: Execute the workflow
+### 15.1 Complete Workflow Architecture
 
-Open the workflow in n8n and select **Execute Workflow** or execute the appropriate starting node, depending on the trigger configuration.
+![Complete n8n Workflow Architecture](docs/Workflow_architecture.png)
 
-### Step 3: Inspect the SerpApi output
+This screenshot shows the color-coded n8n workflow and its connected processing stages.
 
-Verify that the search request succeeds and returns relevant organic search results.
+### 15.2 Content Gap Analysis
 
-### Step 4: Inspect competitor URLs
+![Content Gap Analysis Output](docs/content-gap-analysis.png)
 
-Check that the URL filtering stage:
+This output should demonstrate the content gaps and opportunities identified from the collected research.
 
-- Removes blocked domains.
-- Removes duplicate URLs.
-- Keeps valid competitor URLs.
-- Returns the expected number of URLs.
+### 15.3 Audience Persona Analysis
 
-### Step 5: Inspect extracted headings
+![Audience Persona Output](docs/audience-persona.png)
 
-Confirm that accessible competitor pages return usable page content and heading data.
+This output should demonstrate the generated audience insights, such as pain points, goals, and decision factors.
 
-If a website fails, inspect the error and ensure that one failed page does not unnecessarily stop all remaining requests.
+### 15.4 Content Strategy
 
-### Step 6: Inspect AI outputs
+![Content Strategy Output](docs/content-strategy.png)
 
-Review the output of the configured AI agents.
+This output should demonstrate the content planning recommendations produced by the configured strategy agent.
 
-Ensure that responses contain meaningful research rather than empty values, `false` placeholders, malformed JSON, or undefined fields.
+### 15.5 SEO Recommendations
 
-### Step 7: Verify the final mapping
+![SEO Recommendations Output](docs/seo-recommendations.png)
 
-Check that the final Code node produces the correct field names and data types expected by Google Sheets.
+This output should demonstrate the SEO recommendations generated from the available research.
 
-### Step 8: Verify the spreadsheet
+### 15.6 Final Google Sheets Output
 
-Open the output spreadsheet and confirm that the result has been written to the intended worksheet.
+![Google Sheets Output](docs/google-sheets-output.png)
 
----
+This screenshot should demonstrate the final structured results stored in Google Sheets.
 
-## 15. Expected Outputs
-
-The workflow is designed to transform keyword research into structured SEO planning information.
-
-Depending on the enabled nodes and output configuration, the resulting information may include:
-
-- Target keyword and related keywords.
-- Relevant competitor URLs.
-- Extracted competitor headings.
-- Suggested content title and outline.
-- Search intent classification.
-- Potential content gaps.
-- Audience persona insights.
-- Content strategy recommendations.
-- SEO planning recommendations.
-
-### Example output concept
-
-For the keyword `sso solutions`, the workflow may identify relevant competitor pages, collect their accessible headings, and generate a proposed outline covering topics such as SSO fundamentals, implementation considerations, integrations, security, and solution evaluation.
-
-This is an illustrative example. Actual results depend on current search results, accessible competitor pages, model responses, and the prompts configured in the workflow.
-
-### Output validation
-
-A successful workflow execution should be verified at three levels:
-
-1. **Data collection:** Search results and competitor research are available.
-2. **AI analysis:** Generated outputs are meaningful and conform to the expected structure.
-3. **Data storage:** Correct values are written to the intended Google Sheets columns.
-
----
+**Note:** Upload the corresponding screenshot files to the `docs` folder before using these image references. Remove any sections for screenshots you have not uploaded, and include only genuine outputs from successful workflow executions.
 
 ## 16. Customization
 
-The workflow can be adapted to different keywords and content research requirements.
+### Change the Target Keyword
 
-### Change the target keyword
+Update the keyword in the input sheet or configured input node.
 
-Update the keyword in the input sheet or the configured input node.
+### Adjust the Number of Competitor Pages
 
-### Adjust the number of competitors
+Change the URL limit to control how many competitor pages are processed.
 
-Change the limit applied after URL filtering to control how many competitor pages are processed.
+A smaller limit may reduce execution time and API usage, but it can also reduce research coverage.
 
-A smaller limit reduces the number of page requests but may provide less coverage.
+### Customize the Blocked Domains
 
-### Customize blocked domains
+Modify the URL filtering Code node to exclude domains that are irrelevant or unsuitable for the research task.
 
-Modify the Code node's blocked-domain list to exclude sites that are irrelevant, inaccessible, or unsuitable for the research objective.
+Review exclusions carefully so relevant competitor pages are not unintentionally removed.
 
-Review exclusions carefully so useful competitor pages are not removed unintentionally.
-
-### Modify AI prompts
+### Modify AI Prompts
 
 Update the prompts for content gap analysis, audience personas, content strategy, SEO recommendations, or outline generation.
 
-After making changes, test the output format and verify that the agents still produce valid results.
+After changing prompts, verify that the agents still return meaningful results in the expected structure.
 
-### Update Google Sheets columns
+### Change the AI Model
 
-If you add, remove, or rename output columns, update the final field mappings and any intermediate transformations that depend on those fields.
+Select another supported model in the relevant AI node, if desired.
 
-### Adjust request handling
+Re-test the same input keyword and compare the quality, completeness, structure, response time, and cost of the outputs.
 
-Tune HTTP request timeouts, retry settings, and error-handling behavior according to the websites being researched and the needs of your workflow.
+### Update Google Sheets Fields
 
----
+If you add, remove, or rename columns, update the final Code node mappings and any intermediate nodes that depend on those fields.
 
 ## 17. Troubleshooting
 
-### Issue 1: SerpApi request fails
+### SerpApi Request Fails
 
-**Possible causes:**
+**Possible causes:** Invalid credentials, incorrect parameters, quota restrictions, or temporary service issues.
 
-- Invalid API key.
-- Incorrect request parameters.
-- API quota or account restrictions.
-- Temporary service or network issues.
+**Resolution:** Check the API key, inspect the node's error message, and test the search request independently.
 
-**Resolution:**
+### Competitor URL Is Missing
 
-Verify the credential, inspect the node's error message, and test the search request independently.
+**Possible causes:** The domain is blocked, the URL is a duplicate, the input field is incorrect, or an earlier node filters the result.
 
-### Issue 2: Competitor URL is missing
+**Resolution:** Inspect the data before and after the URL filtering Code node.
 
-**Possible causes:**
+### HTTP Request Times Out
 
-- The URL is included in the blocked-domain list.
-- The URL was removed as a duplicate.
-- The input data uses an unexpected field name.
-- An earlier node filtered the result.
+**Possible causes:** Slow websites, anti-bot protection, large pages, or network problems.
 
-**Resolution:**
+**Resolution:** Adjust the timeout, enable retries where appropriate, and handle failed pages so the remaining workflow can continue. Increasing the timeout does not guarantee access to a restricted website.
 
-Inspect the output of the URL collection and filtering nodes. Confirm that the expected URL is present before filtering.
+### Heading Extraction Returns Empty Results
 
-### Issue 3: HTTP Request times out
+**Possible causes:** Incorrect selectors, dynamically rendered content, a failed HTTP response, or a page with an unexpected HTML structure.
 
-**Possible causes:**
+**Resolution:** Inspect the HTTP response and update the extraction configuration as required.
 
-- The website responds slowly.
-- Automated requests are restricted.
-- The page is large.
-- The network connection is unreliable.
+### AI Agent Returns Empty Values or `false`
 
-**Resolution:**
+**Possible causes:** Missing inputs, unclear prompts, incorrect output parser schemas, or model responses that do not match the required structure.
 
-Increase the timeout where appropriate, enable retries, and use error handling to skip failed pages. A longer timeout will not resolve a permanent block.
+**Resolution:** Check the input JSON, prompt instructions, connected output parser, and expected data types. Execute the agent again and validate its output before sending it to Google Sheets.
 
-### Issue 4: HTML extraction returns empty headings
+### Google Sheets Contains Undefined Values
 
-**Possible causes:**
+**Possible causes:** Incorrect field names, changed JSON structure, invalid expressions, or incompatible data types.
 
-- The page uses dynamically rendered content.
-- The HTML structure differs from the extraction configuration.
-- The page returned an error or challenge instead of the expected content.
-- The selectors do not match the page.
+**Resolution:** Inspect the preceding node's output and ensure the final mappings reference existing keys.
 
-**Resolution:**
+### Google Sheets Authentication Fails
 
-Inspect the HTTP response and adjust the HTML extraction configuration. Use only accessible content and do not assume every website can be extracted successfully.
+**Possible causes:** Expired authorization, missing permissions, or incorrect spreadsheet selection.
 
-### Issue 5: AI agent returns `false` or empty values
-
-**Possible causes:**
-
-- The prompt does not clearly specify the required output.
-- The structured output parser is missing or misconfigured.
-- The model returns data in a different format.
-- Required input fields are missing.
-
-**Resolution:**
-
-Review the prompt, connect and configure the output parser where required, verify the expected field types, and execute the agent again.
-
-### Issue 6: Google Sheets contains undefined or missing values
-
-**Possible causes:**
-
-- Incorrect field names.
-- An earlier node changed the JSON structure.
-- The output mapper references fields that do not exist.
-- Arrays or objects are being sent in a format unsuitable for the target cell.
-
-**Resolution:**
-
-Inspect the preceding node's JSON output and ensure the final field mappings match the actual keys. Convert complex values to an appropriate text representation when necessary.
-
-### Issue 7: Google Sheets authentication fails
-
-**Possible causes:**
-
-- Expired or invalid authorization.
-- Missing spreadsheet permissions.
-- Incorrect spreadsheet or worksheet selection.
-
-**Resolution:**
-
-Reauthorize the credential, confirm spreadsheet access, and test the Google Sheets node independently.
-
----
+**Resolution:** Reauthorize the Google Sheets credential and test the node independently.
 
 ## 18. Security and Best Practices
 
-Security is essential when publishing an automation workflow in a public repository.
+Security is important because this repository is public.
 
-### Never commit secrets
+### Protect API Keys and OAuth Secrets
 
-Do not publish:
+Never publish:
 
 - SerpApi API keys.
 - Gemini API keys.
 - Google OAuth Client Secrets.
 - Access tokens or refresh tokens.
-- Passwords or authorization headers.
-- Private webhook URLs or sensitive personal data.
+- Passwords and authorization headers.
+- Private credentials or sensitive personal information.
 
-Use n8n's credential-management features wherever possible.
-
-### Inspect the exported workflow
+### Inspect the Exported Workflow
 
 Before publishing the workflow JSON:
 
-1. Export the workflow.
+1. Export the workflow from n8n.
 2. Open the JSON file in a text editor.
-3. Search for sensitive values, including `api_key`, `clientSecret`, `access_token`, `refresh_token`, and `Authorization`.
-4. Inspect suspicious node parameters and hardcoded headers.
-5. Replace any exposed secrets with safe placeholders or remove them.
-6. Verify that the cleaned JSON remains valid and can be imported.
+3. Search for sensitive fields and hardcoded values.
+4. Inspect node parameters and authorization headers.
+5. Remove or replace any exposed secrets.
+6. Confirm that the cleaned workflow JSON remains valid.
+7. Import-test the cleaned file before sharing it.
 
-Credential secrets are generally not included in normal workflow exports, but sensitive values may still exist in node parameters. Always inspect the actual file.
+Normal n8n workflow exports generally reference saved credentials rather than exporting their stored secret values, but hardcoded secrets may still appear in node parameters.
 
-### Protect spreadsheet data
+### Protect Google Sheets Data
 
-Use your own test spreadsheet when demonstrating the project. Do not publish private customer information, confidential business data, or personal account details.
+Use a test spreadsheet with non-sensitive data during demonstrations. Do not publish private customer information or confidential business data.
 
-### Use `.gitignore` where appropriate
+### Rotate Exposed Credentials
 
-Exclude local configuration files, temporary exports, logs, private datasets, and files containing credentials.
+If a real API key or secret is accidentally published, revoke or rotate it immediately. Deleting the value from the latest version of the file does not remove it from repository history.
 
-Do not rely on `.gitignore` as a substitute for checking the files you upload manually through GitHub.
+## 19. Meaningful Use of SerpApi
 
-### If a secret is exposed
+SerpApi is a core data source in this project.
 
-Revoke or rotate the exposed credential immediately. Removing it from the latest file does not invalidate a secret that was already published in repository history.
+The Google Search API retrieves search results for the target keyword. The organic listings are used to discover competitor URLs, which feed the subsequent page retrieval, heading extraction, and AI-assisted analysis stages.
 
----
+SerpApi therefore contributes directly to the workflow's research process rather than serving only as a decorative or unused integration.
 
-## 19. SerpApi Integration
+The resulting search intelligence helps provide context for competitor research and SEO content planning.
 
-SerpApi is a core data source for this project.
-
-The workflow uses the Google Search API to retrieve search results for a target keyword. The organic listings provide competitor URLs that feed into the downstream research pipeline.
-
-The collected search intelligence supports:
-
-- Competitor discovery.
-- Competitor page selection.
-- Content structure research.
-- Context for AI-assisted content analysis.
-- SEO content planning.
-
-The usefulness of the downstream analysis depends partly on the quality and relevance of the search results and competitor pages collected.
-
-Official documentation: https://serpapi.com/search-api
-
----
+Documentation: https://serpapi.com/search-api
 
 ## 20. AI Usage Disclosure
 
-This project uses AI for research analysis and content recommendation generation.
+AI models are used for research analysis and content recommendation generation.
 
-The exact models, tools, and their contributions should be disclosed accurately.
+The following disclosure should be updated to match the actual tools and contributions in your implementation:
 
-For example, if these tools were used in your implementation:
-
-- **Gemini:** AI-assisted content research, audience analysis, strategy generation, and SEO recommendations.
+- **Gemini:** AI-assisted analysis for the configured content research and planning agents.
 - **n8n:** Workflow orchestration, API integration, data transformation, and automation.
-- **ChatGPT:** Development assistance, prompt refinement, and troubleshooting, if applicable.
-- **SerpApi:** Retrieval of Google search results used for competitor discovery and research.
+- **SerpApi:** Google search results used for competitor discovery and research.
+- **ChatGPT:** Development assistance, prompt refinement, or troubleshooting, if applicable.
 
-Update this section to reflect the tools actually used and their real contributions.
-
-AI-generated research should be reviewed before being used in published content or business decisions.
-
----
+AI-generated outputs are reviewed as part of testing. The quality of the results depends on the model, prompts, available research data, and output validation.
 
 ## 21. Limitations
 
-- Search results can change over time.
+- Search results may change over time.
 - Some competitor websites may block automated requests or return incomplete content.
-- HTTP requests may time out or fail because of website restrictions.
-- Extracted headings may not represent the full page content.
+- HTTP requests may time out.
+- Extracted headings may not represent the entire page.
 - AI-generated insights may contain inaccuracies or unsupported assumptions.
-- Search intent and audience persona predictions are estimates, not verified user research.
-- Keyword metrics depend on the configured data sources and may not be available in every run.
-- Workflow execution depends on API availability, credentials, rate limits, and external service configuration.
-- Users must configure their own credentials and spreadsheet access.
-
----
+- Audience persona and search intent classifications are estimates, not verified user research.
+- Keyword metrics depend on the configured data sources.
+- Different AI models may produce different levels of detail, reasoning quality, and output consistency.
+- Execution depends on API availability, usage limits, credentials, and external services.
 
 ## 22. Future Enhancements
 
@@ -878,35 +684,31 @@ Potential improvements include:
 
 - More robust retry and error-handling mechanisms.
 - Better competitor relevance scoring.
-- More advanced keyword clustering.
+- Advanced keyword clustering.
 - Improved content gap prioritization.
-- Validation of AI output schemas.
-- Support for additional search engines or research providers.
-- Content brief export to Markdown or other document formats.
-- Execution monitoring and structured logs.
+- Stronger validation of structured AI outputs.
+- Execution monitoring and detailed logs.
 - Cost and token usage tracking.
-- Automated quality checks for generated outlines.
+- Automated content brief export.
+- Additional research integrations.
 
-These are potential future enhancements and should not be considered implemented features unless they are added and tested.
+These are potential enhancements and should not be considered implemented features unless they are added and tested.
 
----
-
-## 23. Demo
+## 23. Demo Video
 
 **Demo video:** Add the public or unlisted demo video URL here after uploading it.
 
 The demonstration should show:
 
-1. The overall n8n workflow.
+1. The complete n8n workflow.
 2. A target keyword being processed.
-3. SerpApi returning relevant search results.
+3. SerpApi returning Google search results.
 4. Competitor URL filtering and heading extraction.
-5. AI-generated research and content recommendations.
-6. The final results appearing in Google Sheets.
+5. Actual AI agent outputs.
+6. The final results in Google Sheets.
+7. A successful end-to-end workflow execution.
 
-Use a test keyword and non-sensitive data during recording.
-
----
+Keep the video under three minutes for the hackathon submission and ensure that the link is publicly accessible or available to anyone with the link.
 
 ## 24. Author
 
@@ -914,14 +716,10 @@ Use a test keyword and non-sensitive data during recording.
 
 GitHub: https://github.com/bali1527
 
-Project repository: https://github.com/bali1527/serpapi-ai-seo-content-intelligence-agent
-
----
+Project Repository: https://github.com/bali1527/serpapi-ai-seo-content-intelligence-agent
 
 ## 25. License
 
 No license has been selected for this project yet.
 
-If you intend to allow others to reuse, modify, and distribute the project, choose an appropriate open-source license and add the corresponding `LICENSE` file.
-
-Until a license is added, do not imply that the repository has an open-source license.
+If you intend to allow others to reuse, modify, and distribute the project, choose an appropriate open-source license and add the corresponding `LICENSE` file. Until then, do not imply that the repository has an open-source license.
